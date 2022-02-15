@@ -1,0 +1,106 @@
+{
+  "_from": "swift-tools",
+  "_id": "swift-tools@0.1.28",
+  "_inBundle": false,
+  "_integrity": "sha512-hgXLhVDJSrsvY6ukb+KV5LrFKuh1XtZcQx8L0dUU9YXhq20W4KYN9XCzcwGgN7QANerFevI5g0OEFJCKIfCOJg==",
+  "_location": "/swift-tools",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "tag",
+    "registry": true,
+    "raw": "swift-tools",
+    "name": "swift-tools",
+    "escapedName": "swift-tools",
+    "rawSpec": "",
+    "saveSpec": null,
+    "fetchSpec": "latest"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npmjs.org/swift-tools/-/swift-tools-0.1.28.tgz",
+  "_shasum": "973a7194c376ea2103b42bee93a17cc8de2b00df",
+  "_spec": "swift-tools",
+  "_where": "/Users/theo/Documents/remix-css-modules",
+  "author": {
+    "name": "Theodore Hays"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "bundleDependencies": false,
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "card-validator": "^8.1.1",
+    "classnames": "^2.3.1",
+    "formik": "^2.2.9",
+    "js-beautify": "^1.14.0",
+    "moment": "^2.29.1",
+    "polished": "^4.1.3",
+    "prismjs": "^1.25.0",
+    "react-bootstrap": "^2.0.2",
+    "react-braintree-fields": "^1.6.0",
+    "react-chips": "^0.8.0",
+    "react-color": "^2.19.3",
+    "react-dropzone": "^11.4.2",
+    "react-input-mask": "^2.0.4",
+    "react-input-slider": "^6.0.1",
+    "react-moment": "^1.1.1",
+    "react-number-format": "^4.8.0",
+    "react-simple-code-editor": "^0.11.0",
+    "react-spinners": "^0.11.0",
+    "styled-components": "^5.3.3",
+    "web-vitals": "^1.0.1"
+  },
+  "deprecated": false,
+  "description": "A no-frills react toolset, including labels, buttons and a form system built on Formik- including many field types (text, select, checkbox, rich-text, multiselect, modal select), and advanced field gating logic.",
+  "devDependencies": {
+    "@babel/cli": "^7.16.0",
+    "@babel/core": "^7.16.0",
+    "prettier": "^2.5.1",
+    "react": "../du2/node_modules/react",
+    "react-dom": "^17.0.2",
+    "react-scripts": "4.0.3",
+    "watch": "^1.0.2"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "keywords": [
+    "react",
+    "forms",
+    "inputs"
+  ],
+  "main": "dist/index.js",
+  "name": "swift-tools",
+  "peerDependencies": {
+    "react": "../du2/node_modules/react"
+  },
+  "scripts": {
+    "babel-version": "babel --version",
+    "build": "rm -rf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files",
+    "eject": "react-scripts eject",
+    "start": "react-scripts start",
+    "test": "react-scripts test",
+    "watch": "watch 'yarn run build' ./src"
+  },
+  "version": "0.1.33",
+  "watch": {
+    "build": "src/"
+  }
+}

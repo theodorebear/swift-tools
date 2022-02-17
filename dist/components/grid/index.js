@@ -8,7 +8,10 @@ exports.GridItem = exports.Grid = exports.Flex = exports.Box = void 0;
 var _jsxRuntime = require("react/jsx-runtime");
 
 var Grid = function Grid(props) {
-  return /*#__PURE__*/(0, _jsxRuntime.jsx)(_jsxRuntime.Fragment, {
+  return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
+    style: {
+      marginBottom: '8px'
+    },
     children: props.children
   });
 };
@@ -16,7 +19,10 @@ var Grid = function Grid(props) {
 exports.Grid = Grid;
 
 var GridItem = function GridItem(props) {
-  return /*#__PURE__*/(0, _jsxRuntime.jsx)(_jsxRuntime.Fragment, {
+  return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
+    style: {
+      marginBottom: '8px'
+    },
     children: props.children
   });
 };
@@ -24,7 +30,10 @@ var GridItem = function GridItem(props) {
 exports.GridItem = GridItem;
 
 var Box = function Box(props) {
-  return /*#__PURE__*/(0, _jsxRuntime.jsx)(_jsxRuntime.Fragment, {
+  return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
+    style: {
+      marginBottom: '8px'
+    },
     children: props.children
   });
 };
@@ -32,7 +41,10 @@ var Box = function Box(props) {
 exports.Box = Box;
 
 var Flex = function Flex(props) {
-  return /*#__PURE__*/(0, _jsxRuntime.jsx)(_jsxRuntime.Fragment, {
+  return /*#__PURE__*/(0, _jsxRuntime.jsx)("div", {
+    style: {
+      marginBottom: '8px'
+    },
     children: props.children
   });
 };

@@ -1,12 +1,12 @@
 export const Grid = (props) => {
-	return <>{props.children}</>
+	return <div style={{ marginBottom: '8px' }}>{props.children}</div>
 }
 export const GridItem = (props) => {
-	return <>{props.children}</>
+	return <div style={{ marginBottom: '8px' }}>{props.children}</div>
 }
 export const Box = (props) => {
-	return <>{props.children}</>
+	return <div style={{ marginBottom: '8px' }}>{props.children}</div>
 }
 export const Flex = (props) => {
-	return <>{props.children}</>
+	return <div style={{ marginBottom: '8px' }}>{props.children}</div>
 }

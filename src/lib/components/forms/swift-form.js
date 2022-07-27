@@ -2,7 +2,6 @@ import React, { useState, useEffect, useImperativeHandle, forwardRef, useRef } f
 import { SwiftFormStyled } from './swift-form-style'
 import { Formik, Field, useFormikContext } from 'formik'
 import classNames from 'classnames'
-
 import SwiftDrop from '../inputs/swift-drop'
 import SwiftInputText from '../inputs/swift-input-text'
 import SwiftInputTextSelect from '../inputs/swift-input-textselect'
@@ -12,12 +11,13 @@ import SwiftInputCollection from '../inputs/swift-input-collection'
 import SwiftInputTime from '../inputs/swift-input-time'
 import SwiftInputSlider from '../inputs/swift-input-slider'
 import SwiftInputTextChip from '../inputs/swift-input-text-chip'
+import SwiftInputOTP from '../inputs/swift-input-otp'
 // error in remix - Cannot read properties of undefined (reading 'root')
 // import SwiftInputCode from './swift-input-code/swift-input-code'
 import SwiftCreditCard from '../inputs/swift-credit-card'
 import SwiftButton from '../buttons/swift-button'
 import SwiftSelectModal from '../inputs/swift-input-select-modal'
-
+import SwiftInputTabs from '../inputs/swift-input-tabs'
 import SwiftLabel from '../inputs/swift-label'
 import SwiftDivider from '../inputs/swift-divider'
 import SwiftInputHidden from '../inputs/swift-input-hidden'
@@ -34,6 +34,7 @@ import SwiftSelectEnum from '../inputs/swift-select-enum'
 import SwiftLine from '../inputs/swift-line'
 import SwiftMultiButton from '../inputs/swift-multibutton'
 import { GridItem, Box } from '../grid'
+import { SwiftGridRow, SwiftGridCol } from '../grid/index'
 
 import valid from 'card-validator'
 
@@ -67,6 +68,8 @@ const SwiftFormItem = (props) => {
     myRefs,
     submitRef,
   } = props
+
+  const { submitForm } = useFormikContext()
 
   return (
     <>
@@ -105,6 +108,21 @@ const SwiftFormItem = (props) => {
           value={values[item.key] || []}
           checked={values[item.key] ? true : false}
           disabled={item.disabled ?? undefined}
+        />
+      ) : item.type === 'tabs' ? (
+        <SwiftInputTabs
+          {...item}
+          name={item.key}
+          value={values[item.key] ?? ''}
+          values={item.values || []}
+          onChange={(val, e) => {
+            if (item.onChange) {
+              item.onChange(val)
+            }
+            setFieldValue(item.key, val)
+          }}
+          helperText={touched[item.key] && errors[item.key]}
+          error={Boolean(touched[item.key] && errors[item.key])}
         />
       ) : item.type === 'radio' ? (
         <SwiftInputRadio
@@ -276,7 +294,7 @@ const SwiftFormItem = (props) => {
             loading={isSubmitting == true && item.type === 'submit' ? true : false}
             inlineForm={inline && fields.filter((f) => f.type != 'submit' && f.label && f.label.length > 0).length > 0 ? true : false}
             theme={theme}
-            width={item.width || item.gridColSpan ? 'full' : ''}
+            width={item.width || item.cols ? 'full' : ''}
             //color={item.type === "submit" && isSubmitting == "success" ? "green" : item.color || "primary"}
             //icon={item.type === "submit" && isSubmitting == "success" ? "check" : item.icon ?? undefined}
             color={item.color ?? undefined}
@@ -300,32 +318,29 @@ const SwiftFormItem = (props) => {
         />
       ) : item.type === 'password' ? (
         <SwiftInputText
-          fullWidth
-          variant="filled"
-          label={item.label}
+          {...item}
+          index={index}
           name={item.key}
           value={values[item.key] ?? ''}
-          disabled={item.disabled ?? undefined}
           onBlur={(e) => {
             handleBlur(e)
             if (item.onBlur) {
               item.onBlur(e)
             }
           }}
-          placeholder={item.placeholder ?? undefined}
-          type={item.type}
-          autoCorrect={item.autoCorrect}
-          autoComplete={item.autoComplete}
-          autoFocus={item.autoFocus ?? undefined}
+          autoCorrect={item.autoCorrect && !item.search ? true : false}
+          autoComplete={item.autoComplete && !item.search ? true : false}
+          autoCapitalize={item.autoCapitalize && !item.search ? true : false}
           helperText={touched[item.key] && errors[item.key]}
           error={Boolean(touched[item.key] && errors[item.key])}
+          theme={theme}
+          myRefs={myRefs}
           onChange={(val) => {
             if (item.onChange) {
               item.onChange(val)
             }
             setFieldValue(item.key, val)
           }}
-          theme={theme}
         />
       ) : item.type === 'textarea' ? (
         <SwiftInputTextarea
@@ -375,7 +390,7 @@ const SwiftFormItem = (props) => {
             setFieldValue(item.key, val)
           }}
         />
-      ) : item.type === 'date' ? (
+      ) : /*) : item.type === 'date' ? (
         <SwiftInputDate
           fullWidth
           variant="filled"
@@ -395,6 +410,9 @@ const SwiftFormItem = (props) => {
           helperText={touched[item.key] && errors[item.key]}
           error={Boolean(touched[item.key] && errors[item.key])}
           onChange={(val) => {
+            if (item.onChange) {
+              item.onChange(val)
+            }
             setFieldValue(item.key, val)
           }}
         />
@@ -420,8 +438,8 @@ const SwiftFormItem = (props) => {
           onChange={(e) => {
             setFieldValue(item.key, e)
           }}
-        />
-      ) : item.type === 'credit_card' ? (
+        />*/
+      item.type === 'credit_card' ? (
         <SwiftCreditCard setBraintreeTokenize={setBraintreeTokenize} />
       ) : item.type === 'color' ? (
         <SwiftInputColor
@@ -476,7 +494,33 @@ const SwiftFormItem = (props) => {
           mask_suffix={item.mask_suffix}
           clearable={item.clearable ?? undefined}
         />
-      ) : item.type === 'text' ? (
+      ) : item.type === 'otp' ? (
+        <SwiftInputOTP
+          {...item}
+          name={item.key}
+          value={values[item.key] ?? ''}
+          disabled={item.disabled ?? undefined}
+          onBlur={(e) => {
+            handleBlur(e)
+            if (item.onBlur) {
+              item.onBlur(e)
+            }
+          }}
+          autoCorrect={false}
+          autoComplete={false}
+          autoFocus={false}
+          helperText={touched[item.key] && errors[item.key]}
+          error={Boolean(touched[item.key] && errors[item.key])}
+          onChange={(e) => {
+            console.log('OTP CHANGE', e)
+            setFieldValue(item.key, e)
+            if (e.length == 6 && item.autoSubmit) {
+              //console.log('OTP SUBMITTING', e)
+              submitForm()
+            }
+          }}
+        />
+      ) : item.type === 'text' || item.type === 'time' || item.type === 'date' ? (
         <SwiftInputText
           {...item}
           index={index}
@@ -487,6 +531,21 @@ const SwiftFormItem = (props) => {
             if (item.onBlur) {
               item.onBlur(e)
             }
+          }}
+          onAddressUpdate={(p) => {
+            if (item.onAddressUpdate) {
+              item.onAddressUpdate(p)
+            }
+            fields.forEach((otherItem) => {
+              if (
+                otherItem.chain &&
+                (otherItem.chain.field == item.key || (otherItem.chain.fields && otherItem.chain.fields.includes(item.key)))
+              ) {
+                if (otherItem.chain.type == 'zip' && p.address_components.filter((elem) => elem.types.includes('postal_code')).length) {
+                  setFieldValue(otherItem.key, p.address_components.filter((elem) => elem.types.includes('postal_code'))[0].short_name)
+                }
+              }
+            })
           }}
           autoCorrect={item.autoCorrect && !item.search ? true : false}
           autoComplete={item.autoComplete && !item.search ? true : false}
@@ -909,7 +968,7 @@ const SwiftForm = (props) => {
           theme,
         }) => {
           let formRows = props.gridRows || 1
-          let formCols = inline ? fields.length : props.gridCols || 4
+          let formCols = inline ? fields.length : props.cols || 4
           let formGap = props.theme == 'minimal' ? 0 : props.gridGap ?? 3
 
           return (
@@ -920,22 +979,15 @@ const SwiftForm = (props) => {
                   <span>{status.text}</span>
                 </div>
               ) : null}
-              <Box
-                flex="1"
-                display={inline ? ['grid', 'grid', 'flex'] : 'grid'}
-                flexWrap={inline ? 'wrap' : undefined}
-                gridGap={formGap}
-                gridTemplateColumns={!inline ? 'repeat(' + formCols + ', 1fr)' : undefined}
-                gridAutoRows={!inline ? 'min-content' : undefined}
-              >
+              <SwiftGridRow spacing={[6, 4]} breakpoints={[576]}>
                 {fields.map(function (item, index) {
-                  if (item.type === 'hidden')
-                    return <SwiftInputHidden type="hidden" key={item.key || index} name={item.key} value={item.value ?? ''} />
+                  if (item.type === 'hidden') return null
+                  //<SwiftInputHidden type="hidden" key={item.key || index} name={item.key} value={item.value ?? ''} />
 
-                  if (item.type === 'multibutton' && item.values && item.values.length == 1)
-                    return <SwiftInputHidden type="hidden" key={item.key || index} name={item.key} value={item.value ?? ''} />
+                  if (item.type === 'multibutton' && item.values && item.values.length == 1) return null
+                  //<SwiftInputHidden type="hidden" key={item.key || index} name={item.key} value={item.value ?? ''} />
 
-                  let itemColSpan = ['line', 'subtitle', 'title', 'label'].includes(item.type) ? formCols : item.gridColSpan || formCols
+                  let itemColSpan = ['line', 'subtitle', 'title', 'label'].includes(item.type) ? formCols : item.cols || formCols
 
                   let itemRowSpan = item.gridRowSpan || props.gridRows
 
@@ -979,15 +1031,7 @@ const SwiftForm = (props) => {
                     }
 
                     return (
-                      <Box
-                        key={item.key || index}
-                        flex={inlineItemFlex}
-                        w={inlineItemWidth}
-                        id={'swift-form-element-' + item.key}
-                        style={{
-                          marginLeft: item.indent ? item.indent + 'px' : '',
-                        }}
-                      >
+                      <SwiftGridCol flex={1} key={item.key || index}>
                         <SwiftFormItem
                           item={item}
                           index={index}
@@ -1009,19 +1053,11 @@ const SwiftForm = (props) => {
                           myRefs={myRefs}
                           submitRef={submitRef}
                         />
-                      </Box>
+                      </SwiftGridCol>
                     )
                   } else {
                     return (
-                      <GridItem
-                        key={item.key || index}
-                        rowSpan={itemRowSpan}
-                        colSpan={!inline ? [formCols, formCols, itemColSpan] : [formCols, formCols, undefined]}
-                        id={'swift-form-element-' + item.key}
-                        style={{
-                          marginLeft: item.indent ? item.indent + 'px' : '',
-                        }}
-                      >
+                      <SwiftGridCol widths={[item.cols ? item.cols : 12]} key={index}>
                         <SwiftFormItem
                           item={item}
                           index={index}
@@ -1043,11 +1079,11 @@ const SwiftForm = (props) => {
                           myRefs={myRefs}
                           submitRef={submitRef}
                         />
-                      </GridItem>
+                      </SwiftGridCol>
                     )
                   }
                 })}
-              </Box>
+              </SwiftGridRow>
             </form>
           )
         }}
@@ -1065,6 +1101,7 @@ SwiftForm.defaultProps = {
   easyFiles: false,
   setContext: () => {},
   submitRef: null,
+  theme: 'default',
 }
 
 export default SwiftForm

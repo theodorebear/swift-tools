@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { lighten, darken, transparentize, readableColor } from 'polished';
+import styled from 'styled-components'
+import { lighten, darken, transparentize, readableColor } from 'polished'
 
 export const SwiftInputColorStyled = styled.div`
 	display: block;
@@ -17,23 +17,12 @@ export const SwiftInputColorStyled = styled.div`
 		padding-right: 0;
 
 		&:hover {
-			background: ${(props) =>
-				readableColor(
-					props.theme.color_body_bg,
-					darken(0.15, props.theme.color_body_bg),
-					lighten(0.15, props.theme.color_body_bg),
-					false
-				)};
-
 			background: #e6e6e6;
 			color: #1e1e1e;
 		}
-
 		.swift_input_color_swatch {
 			flex: 1;
-
 			padding: 10px 16px 11px;
-
 			cursor: pointer;
 			display: flex;
 			align-items: center;
@@ -41,16 +30,7 @@ export const SwiftInputColorStyled = styled.div`
 			${(showPicker) =>
 				showPicker &&
 				`
-			background: ${(props) =>
-				readableColor(
-					props.theme.color_body_bg,
-					darken(0.15, props.theme.color_body_bg),
-					lighten(0.15, props.theme.color_body_bg),
-					false
-				)};
-
 			background: #e6e6e6;
-			color: #1e1e1e;
 			color: #1e1e1e;
 		`}
 			.swift_input_color_swatch_view {
@@ -58,14 +38,6 @@ export const SwiftInputColorStyled = styled.div`
 				width: 18px;
 				border-radius: 50%;
 				margin-right: 12px;
-				border: 2px solid
-					${(props) =>
-						readableColor(
-							props.theme.color_body_bg,
-							darken(0.2, props.theme.color_body_bg),
-							lighten(0.2, props.theme.color_body_bg),
-							false
-						)};
 				border: 2px solid ${(props) => darken(0.2, '#fff')};
 			}
 		}
@@ -125,15 +97,6 @@ export const SwiftInputColorStyled = styled.div`
 		props.entered &&
 		`
 		input,input:hover {
-			background: ${(props) =>
-				readableColor(
-					props.theme.color_body_bg,
-					darken(0.15, props.theme.color_body_bg),
-					lighten(0.15, props.theme.color_body_bg),
-					false
-				)};
-			color: ${props.theme.color_body_text};
-
 			background: #e6e6e6;
 			color: #1e1e1e;
 		}
@@ -145,4 +108,4 @@ export const SwiftInputColorStyled = styled.div`
     		background: #fde0e0;
     	}
 	`}
-`;
+`

@@ -19,6 +19,7 @@ const SwiftTableHandle = SortableHandle(() => <span>::</span>)
 
 const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactive_string, dropdown, setDropdown, config }) => {
   //console.log('cell content', { rowKey, data, index, cellValue, column, inactive_string, dropdown, setDropdown  });
+
   return (
     <SwiftTableStyled.cellContent
       textAlign={column['textAlign'] || undefined}
@@ -59,6 +60,14 @@ const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactiv
           <div className="global_aspect_video">
             <iframe src={cellValue} />
           </div>
+        ) : column['type'] == 'bubbles' ? (
+          <ul className="swift_table_cell_bubbles">
+            {cellValue.items.map((item) => (
+              <li className={item.plain ? 'plain' : null} style={item.style ?? {}}>
+                {item.name}
+              </li>
+            ))}
+          </ul>
         ) : column['type'] == 'media' && cellValue.length ? (
           <div
             className="swift_table_cell_media"
@@ -458,7 +467,7 @@ const SwiftTable = (props) => {
     }
   }
 
-  console.log('SwiftTable - columns', columns)
+  //console.log('SwiftTable - columns', columns)
   // console.log("sortField", sortField);
   // console.log("sortDirection", sortDirection);
 

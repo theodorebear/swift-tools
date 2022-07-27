@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { readableColor, darken } from 'polished';
+import styled from 'styled-components'
+import { readableColor, darken } from 'polished'
 
 export const SwiftInputSliderStyled = styled.div`
 	.swift_input_slider_element {
@@ -8,11 +8,11 @@ export const SwiftInputSliderStyled = styled.div`
 			width: 100%;
 			display: block;
 			> div:first-of-type {
-				background: ${(props) => darken(0.075, props.theme.color_primary)};
+				background: teal;
 			}
 			> div:last-of-type > div {
 				background: #ff5d00;
 			}
 		}
 	}
-`;
+`

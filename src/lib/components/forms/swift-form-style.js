@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 
 export const SwiftFormStyled = styled.div`
 	.form {
@@ -31,9 +31,13 @@ export const SwiftFormStyled = styled.div`
 	.swift-form-element {
 	}
 
-	${props => props.theme == "default" ? `
+	${(props) =>
+		props.theme == 'default'
+			? `
 
-	` : props.theme == "minimal" ? `
+	`
+			: props.theme == 'minimal'
+			? `
 		display: block;
 		width: 100%;
 		outline: none;
@@ -50,5 +54,6 @@ export const SwiftFormStyled = styled.div`
 		color: #1e1e1e;
 
 		transition: all 0.12s ease-out;
-	` : ``}
+	`
+			: ``}
 `

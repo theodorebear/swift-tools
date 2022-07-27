@@ -1,13 +1,18 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { SwiftInputTimeStyled } from './swift-input-time-style'
 import SwiftLabel from './swift-label'
 import classNames from 'classnames'
 import Moment from 'react-moment'
 import moment from 'moment'
+
+//import { TimePicker } from 'antd'
+
+//import TimePicker from 'rc-time-picker'
 //import TimePicker from "rc-time-picker"
 //import "rc-time-picker/assets/index.css"
 
 const SwiftInputTime = (props) => {
+  const innerRef = useRef()
   //console.log("sit - props", props)
   //const [open, setOpen] = useState(false)
   return (
@@ -35,7 +40,23 @@ const SwiftInputTime = (props) => {
         ) : (
           <div className="swift-input-date-moment"></div>
         )}
-        TimePicker was here, removed because it didnt work with RemixJS!
+        {/*<TimePicker
+          onChange={(e) => {
+            console.log('timepicker change', e)
+            //props.onChange(moment(e).format('H:mm') + ':00')
+          }}
+          defaultOpenValue={moment('00:00:00', 'HH:mm:ss')}
+        />
+*/}
+        {/*<TimePicker
+          //open={false}
+          showSecond={false}
+          minuteStep={5}
+          use12Hours={true}
+          onChange={(e) => {
+            props.onChange(moment(e).format('H:mm') + ':00')
+          }}
+        />*/}
       </div>
       {props.error && props.helperText ? <SwiftLabel error>{props.helperText}</SwiftLabel> : null}
     </SwiftInputTimeStyled>

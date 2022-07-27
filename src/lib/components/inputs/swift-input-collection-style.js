@@ -1,5 +1,5 @@
-import styled from "styled-components"
-import { lighten, darken, transparentize, readableColor } from "polished"
+import styled from 'styled-components'
+import { lighten, darken, transparentize, readableColor } from 'polished'
 
 export const SwiftInputCollectionStyled = styled.div`
 	.swift_input_collection_item_actions {
@@ -32,9 +32,7 @@ export const SwiftInputCollectionStyled = styled.div`
 		padding: 12px 18px;
 		padding-left: 12px;
 		border-radius: 4px;
-		border: 2px solid ${(props) => readableColor(props.theme.color_body_bg, darken(0.15, props.theme.color_body_bg), lighten(0.15, props.theme.color_body_bg), false)};
-
-		border: 2px solid ${(props) => darken(0.15, "#fff")};
+		border: 2px solid ${(props) => darken(0.15, '#fff')};
 
 		> div:not(:last-of-type) {
 			margin-bottom: 8px;

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { lighten, darken, transparentize, readableColor } from 'polished';
+import styled from 'styled-components'
+import { lighten, darken, transparentize, readableColor } from 'polished'
 
 export const SwiftSelectModalStyled = styled.div`
 	display: block;
@@ -15,17 +15,6 @@ export const SwiftSelectModalStyled = styled.div`
 		overflow: hidden;
 		font-size: 16px;
 		line-height: 30px;
-		border: 2px solid
-			${(props) =>
-				readableColor(
-					props.theme.color_body_bg,
-					darken(0.1, props.theme.color_body_bg),
-					lighten(0.1, props.theme.color_body_bg),
-					false
-				)};
-
-		color: #1e1e1e;
-
 		border: 2px solid #e6e6e6;
 		background: #f2f2f2;
 		color: #1e1e1e;
@@ -69,13 +58,13 @@ export const SwiftSelectModalStyled = styled.div`
 					margin-right: 4px;
 					font-size: 12px;
 					font-weight: 700;
-					color: ${(props) => props.theme.color_primary};
+					color: teal;
 				}
 				svg {
 					display: block;
 					width: 8px;
 					height: 8px;
-					fill: ${(props) => props.theme.color_primary};
+					fill: teal;
 					transition: transform 0.15s ease-out;
 				}
 				&:hover {
@@ -91,15 +80,6 @@ export const SwiftSelectModalStyled = styled.div`
 		props.entered &&
 		`
 		select,select:hover {
-			background: ${(props) =>
-				readableColor(
-					props.theme.color_body_bg,
-					darken(0.15, props.theme.color_body_bg),
-					lighten(0.15, props.theme.color_body_bg),
-					false
-				)};;
-			color: ${props.theme.color_body_text};
-
 			background: ${(props) => darken(0.1, '#fff')};
 			color: #1e1e1e;
 
@@ -112,4 +92,4 @@ export const SwiftSelectModalStyled = styled.div`
     		background: #fde0e0;
     	}
 	`}
-`;
+`

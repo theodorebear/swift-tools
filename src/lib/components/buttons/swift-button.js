@@ -61,15 +61,7 @@ const SwiftButton = (props) => {
         onClick={props.onClick ? props.onClick : props.modal ? () => setModal(props.modal) : undefined}
         theme={props.theme}
       >
-        {props.href ? (
-          <a href={props.href} shallow={props.shallow ?? false} target={props.target ?? undefined} download={props.download ?? undefined}>
-            <SwiftButtonContent {...props} />
-          </a>
-        ) : (
-          <a>
-            <SwiftButtonContent {...props} />
-          </a>
-        )}
+        {props.href ? <SwiftButtonContent {...props} /> : <SwiftButtonContent {...props} />}
       </SwiftButtonStyled>
     </>
   )

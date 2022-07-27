@@ -1,10 +1,10 @@
-import styled from 'styled-components';
-import { lighten, darken, transparentize, readableColor } from 'polished';
+import styled from 'styled-components'
+import { lighten, darken, transparentize, readableColor } from 'polished'
 
 export const SwiftInputTextStyled = styled.div`
-	
-
-	${props => props.theme == "default" ? `
+	${(props) =>
+		props.theme == 'default'
+			? `
 
 	display: block;
 	width: 100%;
@@ -156,7 +156,33 @@ export const SwiftInputTextStyled = styled.div`
 				padding: 8px 16px;
 			}
 		}
+
+
 	}
+
+	.swift_input_text_input_password_view {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+		z-index: 10;
+		padding: 0 8px;
+		svg {
+			height: 18px;
+			height: 18px;
+			opacity: 0.25;
+		}
+		&:hover {
+			svg {
+				opacity: 0.5;
+			}
+		}
+	}
+
+
 
 	&:hover input,
 	input:focus,
@@ -166,14 +192,17 @@ export const SwiftInputTextStyled = styled.div`
 		background: ${darken(0.1, '#fff')};
 		color: #1e1e1e;
 
-		${(props.searchResults || props.searchResultsLoading) ?
-			`
+		${
+			props.searchResults || props.searchResultsLoading
+				? `
 			border-bottom-left-radius:0;
 			border-bottom-right-radius:0;
 			~ .swift_input_text_input_search_results {
 				display:block;
 			}
-		` : ``}
+		`
+				: ``
+		}
 	}
 
 	input:focus {
@@ -181,16 +210,21 @@ export const SwiftInputTextStyled = styled.div`
 			display: none;
 		}
 	}
-	${props.error ?
-		`
+	${
+		props.error
+			? `
 		input {
     		background: #fde0e0;
     		border-color: #d44747;
     	}
-	` : ``}
+	`
+			: ``
+	}
 
 
-	` : props.theme == "minimal" ? `
+	`
+			: props.theme == 'minimal'
+			? `
 		display: block;
 	width: 100%;
 
@@ -239,18 +273,44 @@ export const SwiftInputTextStyled = styled.div`
 		line-height: 29px;
 		transition: all 0.12s ease-out;
 	}
+	.swift_input_text_input_password_view {
+		position: absolute;
+		top: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		align-items: center;
+		cursor: pointer;
+		z-index: 10;
+		padding: 0 8px;
+		svg {
+			height: 18px;
+			height: 18px;
+			opacity: 0.25;
+		}
+		&:hover {
+			svg {
+				opacity: 0.5;
+			}
+		}
+	}
 
 	.swift_input_text_label, label {
 		display: none;	
 	}
-	${props.error ?
-		`
+	${
+		props.error
+			? `
 		input {
     		background: #fde0e0;
     		border-color: #d44747;
     	}
-	` : ``}
-	` : props.theme == 'none' ? `	
+	`
+			: ``
+	}
+	`
+			: props.theme == 'none'
+			? `	
 
 		.swift_input_text_input_element {
 			position:relative;
@@ -280,5 +340,6 @@ export const SwiftInputTextStyled = styled.div`
 				border:1px solid #000;
 			}
 		}
-	` : ``}
-`;
+	`
+			: ``}
+`

@@ -1,4 +1,4 @@
-import styled from "styled-components"
+import styled from 'styled-components'
 
 export const SwiftInputRadiosStyled = styled.div`
 	width: 100%;
@@ -48,13 +48,13 @@ export const SwiftInputRadioStyled = styled.div`
 				margin-right: 4px;
 				font-size: 12px;
 				font-weight: 700;
-				color: ${(props) => props.theme.color_primary};
+				color: teal;
 			}
 			svg {
 				display: block;
 				width: 8px;
 				height: 8px;
-				fill: ${(props) => props.theme.color_primary};
+				fill: teal;
 				transition: transform 0.15s ease-out;
 			}
 			&:hover {

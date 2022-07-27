@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { lighten, darken, transparentize, readableColor } from 'polished';
+import styled from 'styled-components'
+import { lighten, darken, transparentize, readableColor } from 'polished'
 
 export const SwiftInputTimeStyled = styled.div`
   display: block;
@@ -15,22 +15,21 @@ export const SwiftInputTimeStyled = styled.div`
     width: 100%;
     outline: none;
     border: none;
-    padding: 10px 16px;
+    padding: 10px 16px 11px;
     color: inherit;
-    font-size: 16px;
-    background: transparent;
     border-radius: 4px;
     overflow: hidden;
-    border: 2px solid rgba(0, 0, 0, 0.08);
-    transition: all 0.12s ease-out;
+    font-size: 16px;
+    line-height: 29px;
 
     border: 2px solid #e6e6e6;
     background: #f2f2f2;
     color: #1e1e1e;
+
+    transition: all 0.12s ease-out;
   }
+
   .rc-time-picker {
-    width: 100%;
-    opacity: 0;
     .rc-time-picker-input {
       height: auto;
       font-size: inherit;
@@ -95,4 +94,4 @@ export const SwiftInputTimeStyled = styled.div`
         background: #fde0e0;
       }
   `}
-`;
+`

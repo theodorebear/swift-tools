@@ -113,6 +113,11 @@ SwiftTableStyled['cell'] = styled.td`
     white-space: nowrap;
   }
 
+  &[data-type='bubbles'] > a {
+    padding-top: 2px;
+    padding-bottom: 2px;
+  }
+
   &[data-type='number'] {
     white-space: nowrap;
   }
@@ -131,6 +136,26 @@ SwiftTableStyled['cell'] = styled.td`
       content: '';
       display: block;
       padding-top: 100%;
+    }
+  }
+  .swift_table_cell_bubbles {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    li {
+      margin-right: 8px;
+      &:not(.plain) {
+        background: #dae4ea;
+        color: rgb(27 97 145);
+        padding: 4px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 4px;
+      }
+      &.plain {
+        opacity: 0.75;
+        -webkit-font-smoothing: antialiased;
+      }
     }
   }
 

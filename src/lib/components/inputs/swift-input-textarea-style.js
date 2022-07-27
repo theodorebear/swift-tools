@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { lighten, darken, transparentize, readableColor } from 'polished';
+import styled from 'styled-components'
+import { lighten, darken, transparentize, readableColor } from 'polished'
 
 export const SwiftInputTextareaStyled = styled.div`
 	display: block;
@@ -36,15 +36,6 @@ export const SwiftInputTextareaStyled = styled.div`
 		props.entered &&
 		`
 		textarea,textarea:hover {
-			background: ${(props) =>
-				readableColor(
-					props.theme.color_body_bg,
-					darken(0.15, props.theme.color_body_bg),
-					lighten(0.15, props.theme.color_body_bg),
-					false
-				)};;
-			color: ${props.theme.color_body_text};
-
 			background: #e6e6e6;
 			color: #1e1e1e;
 		}
@@ -56,4 +47,4 @@ export const SwiftInputTextareaStyled = styled.div`
     		background: #fde0e0;
     	}
 	`}
-`;
+`

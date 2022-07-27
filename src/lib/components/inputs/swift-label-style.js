@@ -1,9 +1,10 @@
-import styled from "styled-components"
-import { readableColor, lighten, darken } from "polished"
+import styled from 'styled-components'
+import { readableColor, lighten, darken } from 'polished'
 
 export const SwiftLabelStyled = styled.label`
-
-	${props => props.theme == "default" ? `	
+	${(props) =>
+		props.theme == 'default'
+			? `	
 		display: block;
 		opacity: 0.8;
 		font-size: 14px;
@@ -29,35 +30,49 @@ export const SwiftLabelStyled = styled.label`
 			font-weight: 800;
 		}
 
-		${props.type == "sublabel" ?
-			`
+		${
+			props.type == 'sublabel'
+				? `
 			font-size:12px;
 			font-weight:600;
-		` : ``}
+		`
+				: ``
+		}
 
-		${props.color == "primary" ?
-			`
-		    color: ${props.theme.color_primary};
+		${
+			props.color == 'primary'
+				? `
+		    color: teal;
 		   	svg {
 		   		path {
-		   			fill: ${props.theme.color_primary};
+		   			fill: teal;
 		   		}
 		   	}
-	    ` : ``}
+	    `
+				: ``
+		}
 
-		${props.error ?
-			`
+		${
+			props.error
+				? `
 	    	color: #d44747;
 			font-weight: 700;
 			margin-top: 6px;
 			opacity: 1;
 			margin-bottom: 0;
-		` : ``}
+		`
+				: ``
+		}
 
-	` : props.theme == 'none' ? `
-		${props.error &&
+	`
+			: props.theme == 'none'
+			? `
+		${
+			props.error &&
 			`
 	    	color: #d44747;
-		`}
-	` : ``}
+		`
+		}
+	`
+			: ``}
 `

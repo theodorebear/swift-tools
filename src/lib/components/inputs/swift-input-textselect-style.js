@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { lighten, darken, transparentize, readableColor } from 'polished';
+import styled from 'styled-components'
+import { lighten, darken, transparentize, readableColor } from 'polished'
 
 export const SwiftInputTextSelectStyled = styled.div`
 	display: block;
@@ -75,23 +75,10 @@ export const SwiftInputTextSelectStyled = styled.div`
 			left: 0;
 			right: 0;
 			z-index: 6;
-
-			border: 2px solid
-				${(props) =>
-					readableColor(
-						props.theme.color_body_bg,
-						darken(0.15, props.theme.color_body_bg),
-						lighten(0.15, props.theme.color_body_bg),
-						false
-					)};
-			color: #1e1e1e;
-
 			border: 2px solid #e6e6e6;
 			background: #f2f2f2;
 			color: #1e1e1e;
-
 			border-top: none;
-
 			ul {
 				li {
 					font-size: 13px;
@@ -101,7 +88,6 @@ export const SwiftInputTextSelectStyled = styled.div`
 					&:hover {
 						background: #ff5d00;
 						color: ${(props) => readableColor('#FF5D00')};
-
 						background: ${(props) => darken(0.1, '#fff')};
 						color: #1e1e1e;
 					}
@@ -125,14 +111,6 @@ export const SwiftInputTextSelectStyled = styled.div`
 		`
 		input,input:hover,
 		.swift_input_textselect_input_mask {
-			background: ${readableColor(
-				props.theme.color_body_bg,
-				darken(0.15, props.theme.color_body_bg),
-				lighten(0.15, props.theme.color_body_bg),
-				false
-			)};
-			color: ${props.theme.color_body_text};
-
 			border: 2px solid ${darken(0.1, '#fff')};
 			background: ${darken(0.1, '#fff')};
 			color: #1e1e1e;
@@ -145,4 +123,4 @@ export const SwiftInputTextSelectStyled = styled.div`
     		background: #fde0e0;
     	}
 	`}
-`;
+`

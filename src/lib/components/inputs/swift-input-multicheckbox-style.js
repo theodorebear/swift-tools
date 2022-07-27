@@ -1,22 +1,13 @@
-import styled from "styled-components";
-import { lighten, darken, transparentize, readableColor } from "polished";
+import styled from 'styled-components'
+import { lighten, darken, transparentize, readableColor } from 'polished'
 
 export const SwiftInputMultiCheckboxStyled = styled.div`
 	${(props) =>
 		props.border &&
 		`
 		.swift_input_multicheckbox_window {
-			border: 2px solid
-				${readableColor(props.theme.color_body_bg, darken(0.15, props.theme.color_body_bg), lighten(0.15, props.theme.color_body_bg), false)};
-			background: ${readableColor(
-				props.theme.color_body_bg,
-				darken(0.05, props.theme.color_body_bg),
-				lighten(0.05, props.theme.color_body_bg),
-				false
-			)};
-
-			border: 2px solid ${darken(0.15, "#fff")};
-			background: ${darken(0.05, "#fff")};
+			border: 2px solid ${darken(0.15, '#fff')};
+			background: ${darken(0.05, '#fff')};
 			color: #1e1e1e;
 
 			padding: 4px 8px;
@@ -56,7 +47,7 @@ export const SwiftInputMultiCheckboxStyled = styled.div`
 			position: relative;
 			padding-left: 24px;
 			&:after {
-				content: "";
+				content: '';
 				display: block;
 				position: absolute;
 				left: 8px;
@@ -70,7 +61,7 @@ export const SwiftInputMultiCheckboxStyled = styled.div`
 				height: calc(50% + 2px);
 			}
 			&:before {
-				content: "";
+				content: '';
 				display: block;
 				position: absolute;
 				left: 10px;
@@ -82,4 +73,4 @@ export const SwiftInputMultiCheckboxStyled = styled.div`
 			}
 		}
 	}
-`;
+`

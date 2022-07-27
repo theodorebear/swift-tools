@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react'
+import React, { useRef, useEffect, useState, useContext } from 'react'
 import { SwiftInputTextStyled } from './swift-input-text-style'
 import SwiftLabel from './swift-label'
 //import { _inputSearch } from "../../../ajax/agent/global"
@@ -8,13 +8,20 @@ import SwiftButton from '../buttons/swift-button'
 import SwiftIcon from '../icons/swift-icon'
 import InputMask from 'react-input-mask'
 import valid from 'card-validator'
+import Autocomplete from 'react-google-autocomplete'
+import SwiftInputTooltip from './swift-input-tooltip'
 
 const SwiftInputText = (props) => {
   //const innerRef = useRef();
   useEffect(() => {
     if (props.autoFocus && props.fieldRef) props.fieldRef?.current?.focus()
   }, [])
-  const { icon, theme, myRefs, index } = props
+  const { icon, theme, myRefs, index, format } = props
+
+  const [inputType, setInputType] = useState(props.type)
+  useEffect(() => {
+    setInputType(props.type)
+  }, [props.type])
 
   //const [searchValuePrev, setSearchResults] = useState(null)
 
@@ -23,6 +30,8 @@ const SwiftInputText = (props) => {
   const [searchSelectionVeneer, setSearchSelectionVeneer] = useState(null)
 
   const [cardNumberValidate, setCardNumberValidate] = useState(null)
+
+  const [tooltipOpen, setTooltipOpen] = useState(false)
 
   const [submitTimeout, setSubmitTimeout] = useState(null)
   const initialViewLoad = useRef(true)
@@ -189,6 +198,12 @@ const SwiftInputText = (props) => {
               )}
             </div>
           )}
+
+          {props.tooltip && (
+            <div className="swift_input_text_label_tooltip">
+              <SwiftInputTooltip {...props.tooltip} active={tooltipOpen} onClick={() => setTooltipOpen(!tooltipOpen)} />
+            </div>
+          )}
         </div>
       )}
       <div className="swift_input_text_input" onClick={props.onClick ?? undefined}>
@@ -202,72 +217,88 @@ const SwiftInputText = (props) => {
               <SwiftIcon className="swift_input_text_input_icon" i={'card_default'} />
             )
           ) : null}
-          <InputMask
-            type={props.type ? props.type : 'text'}
-            name={props.name}
-            id={'swift_tools_form_input_text_' + props.name}
-            inputRef={(el) => (myRefs.current[index] = el)}
-            placeholder={props.placeholder}
-            // autoFocus={props.autoFocus}
-            disabled={props.disabled}
-            value={typeof props.value === 'object' && Object.keys(props.value).includes('value') ? props.value.value : props.value}
-            mask={
-              props.mask
-                ? props.mask == 'phone'
-                  ? '(999) 999-9999'
-                  : props.mask == 'zip_code'
-                  ? '99999'
-                  : props.mask == 'card_cvv' && props.maskLen
-                  ? props.maskLen == 4
-                    ? '9999'
-                    : '999'
-                  : props.mask == 'card_expiration'
-                  ? '99 / 99'
-                  : props.mask == 'card_number'
-                  ? cardNumberValidate && cardNumberValidate.card && cardNumberValidate.card.type == 'american-express'
-                    ? '9999 999999 99999'
-                    : cardNumberValidate && cardNumberValidate.card && cardNumberValidate.card.type == 'diners-club'
-                    ? '9999 999999 9999'
-                    : '9999 9999 9999 9999'
-                  : props.mask == 'ach_routing'
-                  ? '999999999'
+
+          {format == 'address' ? (
+            <Autocomplete
+              apiKey={'AIzaSyBl03rhZ-2dpk1Dg6ef3-gM75VBdwZ1P70'}
+              onPlaceSelected={(place) => {
+                props.onAddressUpdate(place)
+              }}
+              placeholder=""
+              options={{ types: ['address'] }}
+              //componentRestrictions={{ country: ['us', 'ca'] }}
+              fields={['address_components', 'geometry']}
+              libraries={['places']}
+            />
+          ) : (
+            <InputMask
+              type={inputType ? inputType : 'text'}
+              name={props.name}
+              id={'swift_tools_form_input_text_' + props.name}
+              inputRef={(el) => (myRefs.current[index] = el)}
+              placeholder={props.placeholder}
+              // autoFocus={props.autoFocus}
+              disabled={props.disabled}
+              value={typeof props.value === 'object' && Object.keys(props.value).includes('value') ? props.value.value : props.value}
+              mask={
+                props.mask
+                  ? props.mask == 'phone'
+                    ? '(999) 999-9999'
+                    : props.mask == 'zip_code'
+                    ? '99999'
+                    : props.mask == 'card_cvv' && props.maskLen
+                    ? props.maskLen == 4
+                      ? '9999'
+                      : '999'
+                    : props.mask == 'card_expiration'
+                    ? '99 / 99'
+                    : props.mask == 'card_number'
+                    ? cardNumberValidate && cardNumberValidate.card && cardNumberValidate.card.type == 'american-express'
+                      ? '9999 999999 99999'
+                      : cardNumberValidate && cardNumberValidate.card && cardNumberValidate.card.type == 'diners-club'
+                      ? '9999 999999 9999'
+                      : '9999 9999 9999 9999'
+                    : props.mask == 'ach_routing'
+                    ? '999999999'
+                    : null
                   : null
-                : null
-            }
-            maskChar="_"
-            onFocus={(e) => {
-              // if (searchSelectionVeneer) {
-              //   props.onChange('');
-              // } else if (
-              //   props.search &&
-              //   Object.keys(props.search).includes('min_length') &&
-              //   (props.value.length ?? 0) >= props.search.min_length
-              // ) {
-              //   //console.log("FOCUS SEARCH")
-              //   handleSearch();
-              // }
-            }}
-            onBlur={(e) => {
-              // setTimeout(function () {
-              //   console.log("blurring!", document.activeElement)
-              // }, 1)
-              // if (!props.search || (Object.keys(props.search).includes('custom_allow') && props.search.custom_allow)) return;
-              // if (e.currentTarget.value.length && !searchSelectionVeneer) {
-              //   console.log('SwiftInputText - blurring searched input without setting veneer, setting blank');
-              //   props.onChange('');
-              //   setSearchSelectionVeneer(null);
-              // }
-              // if (!e.currentTarget.value.length && searchSelectionVeneer) {
-              //   console.log('SwiftInputText - blurring searched input with no value but veneer, setting veneer blank');
-              //   setSearchSelectionVeneer(null);
-              // }
-            }}
-            onChange={(e) => handleChange(e.currentTarget.value)}
-            autoCorrect={props.autoCorrect === false || props.search ? 'off' : 'on'}
-            // spellCheck={props.autoCorrect === false ? 'off' : 'on'}
-            autoCapitalize={props.autoCapitalize === false || props.search ? 'off' : 'on'}
-            autoComplete={props.autoComplete === false || props.search ? 'off' : 'on'}
-          />
+              }
+              maskChar="_"
+              onFocus={(e) => {
+                // if (searchSelectionVeneer) {
+                //   props.onChange('');
+                // } else if (
+                //   props.search &&
+                //   Object.keys(props.search).includes('min_length') &&
+                //   (props.value.length ?? 0) >= props.search.min_length
+                // ) {
+                //   //console.log("FOCUS SEARCH")
+                //   handleSearch();
+                // }
+              }}
+              onBlur={(e) => {
+                // setTimeout(function () {
+                //   console.log("blurring!", document.activeElement)
+                // }, 1)
+                // if (!props.search || (Object.keys(props.search).includes('custom_allow') && props.search.custom_allow)) return;
+                // if (e.currentTarget.value.length && !searchSelectionVeneer) {
+                //   console.log('SwiftInputText - blurring searched input without setting veneer, setting blank');
+                //   props.onChange('');
+                //   setSearchSelectionVeneer(null);
+                // }
+                // if (!e.currentTarget.value.length && searchSelectionVeneer) {
+                //   console.log('SwiftInputText - blurring searched input with no value but veneer, setting veneer blank');
+                //   setSearchSelectionVeneer(null);
+                // }
+              }}
+              onChange={(e) => handleChange(e.currentTarget.value)}
+              autoCorrect={props.autoCorrect === false || props.search ? 'off' : 'on'}
+              // spellCheck={props.autoCorrect === false ? 'off' : 'on'}
+              autoCapitalize={props.autoCapitalize === false || props.search ? 'off' : 'on'}
+              autoComplete={props.autoComplete === false || props.search ? 'off' : 'on'}
+            />
+          )}
+
           {searchSelectionVeneer && (
             <div className="swift_input_text_input_search_selection_veneer">
               <span>{searchSelectionVeneer}</span>
@@ -298,6 +329,19 @@ const SwiftInputText = (props) => {
               ) : null}
             </div>
           ) : null}
+
+          {props.type == 'password' && (
+            <div
+              className="swift_input_text_input_password_view"
+              onClick={(e) => {
+                e.preventDefault()
+                e.stopPropagation()
+                setInputType(inputType == 'password' ? 'text' : 'password')
+              }}
+            >
+              <SwiftIcon i={inputType == 'password' ? 'eye' : 'eye_cancel'} />
+            </div>
+          )}
         </div>
 
         {props.submit_button && (

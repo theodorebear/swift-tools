@@ -1,9 +1,10 @@
-import styled from 'styled-components';
-import { lighten, darken, transparentize, readableColor } from 'polished';
+import styled from 'styled-components'
+import { lighten, darken, transparentize, readableColor } from 'polished'
 
 export const SwiftSelectStyled = styled.div`
-
-	${(props) => props.theme == "default" ? `
+	${(props) =>
+		props.theme == 'default'
+			? `
 	display: block;
 	width: 100%;
 	& select {
@@ -61,13 +62,13 @@ export const SwiftSelectStyled = styled.div`
 					margin-right: 4px;
 					font-size: 12px;
 					font-weight: 700;
-					color: ${props.theme.color_primary};
+					color: teal;
 				}
 				svg {
 					display: block;
 					width: 8px;
 					height: 8px;
-					fill: ${props.theme.color_primary};
+					fill: teal;
 					transition: transform 0.15s ease-out;
 				}
 				&:hover {
@@ -80,15 +81,20 @@ export const SwiftSelectStyled = styled.div`
 	}
 
 
-	${props.error ?
-		`
+	${
+		props.error
+			? `
 		select {
     		background: #fde0e0;
     		border-color: #d44747;
     	}
-	` : ``}
+	`
+			: ``
+	}
 
-	` : props.theme == 'minimal' ? `
+	`
+			: props.theme == 'minimal'
+			? `
 		display: block;
 	width: 100%;
 	& select {
@@ -130,19 +136,25 @@ export const SwiftSelectStyled = styled.div`
 		display:none;
 	}
 
-	${props.error ?
-		`
+	${
+		props.error
+			? `
 		select {
     		background: #fde0e0;
     		border-color: #d44747;
     	}
-	`: ``}
-	` : props.theme == 'none' ? `
+	`
+			: ``
+	}
+	`
+			: props.theme == 'none'
+			? `
 		select {
 			width:100%;
 			outline:none;
 			padding:12px 18px;
 			border:1px solid #000;
 		}
-	` : ``}
-`;
+	`
+			: ``}
+`

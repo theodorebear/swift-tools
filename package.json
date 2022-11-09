@@ -67,7 +67,6 @@
     "react-sortable-hoc": "^2.0.0",
     "react-spinners": "^0.11.0",
     "styled-components": "^5.3.3",
-    "suneditor": "^2.44.3",
     "suneditor-react": "^3.4.1",
     "swift-tools": "^0.1.57",
     "web-vitals": "^1.0.1"
@@ -104,7 +103,7 @@
     "test": "react-scripts test",
     "watch": "watch 'NODE_ENV=production yarn run build' ./src"
   },
-  "version": "0.1.98",
+  "version": "0.1.100",
   "watch": {
     "build": "src/"
   }

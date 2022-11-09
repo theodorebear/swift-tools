@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef, useMemo, forwardRef } from "react"
 import { SwiftInputRichTextareaStyled } from "./swift-input-rich-textarea-style"
 import SwiftLabel from "./swift-label"
 import classNames from "classnames"
-import SunEditor from "suneditor-react"
+//import SunEditor from "suneditor-react"
 //const buttonList = typeof window === "object" ? require("suneditor-react").buttonList : () => false
 
 const SwiftInputRichTextarea = (props) => {
@@ -17,32 +17,8 @@ const SwiftInputRichTextarea = (props) => {
 		>
 			<SwiftLabel>{props.label}</SwiftLabel>
 
-			<SunEditor
-				defaultValue={props.value}
-				setOptions={{
-					height: 360,
-					imageUploadUrl: "/handlers/website/upload-suneditor",
-					buttonList: [
-						["undo", "redo"],
-						["font", "fontSize", "formatBlock"],
-						["bold", "underline", "italic", "strike", "subscript", "superscript"],
-						["removeFormat"],
-						"/",
-						["fontColor", "hiliteColor"],
-						["outdent", "indent"],
-						["align", "horizontalRule", "list", "table"],
-						["link", "image", "video"],
-						["fullScreen", "codeView"],
-						// "showBlocks",
-						//["preview", "print"],
-						//["save", "template"],
-					], // Or Array of button list, eg. [['font', 'align'], ['image']]
-				}}
-				onChange={(val) => {
-					console.log("rich-textarea SunEditor onChange", val)
-					props.onChange(val)
-				}}
-			/>
+			rich-textarea not implemented.
+			
 
 			{props.error && props.helperText ? <SwiftLabel error>{props.helperText}</SwiftLabel> : null}
 		</SwiftInputRichTextareaStyled>

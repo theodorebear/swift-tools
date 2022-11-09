@@ -1,88 +1,114 @@
-import { useState, Fragment, useContext } from 'react'
-import SwiftTableStyled from './swift-table-style'
+import { useState, Fragment, useContext } from "react"
+import SwiftTableStyled from "./swift-table-style"
 //import _ from "lodash"
-import Moment from 'react-moment'
+import Moment from "react-moment"
 //import PuffLoader from "react-spinners/PuffLoader"
-import BarLoader from 'react-spinners/BarLoader'
-import SwiftInputCheckbox from '../inputs/swift-input-checkbox'
-import { lighten, darken, transparentize, readableColor } from 'polished'
-import React, { Component } from 'react'
-import { render } from 'react-dom'
-import { SortableContainer, SortableElement, SortableHandle } from 'react-sortable-hoc'
+import BarLoader from "react-spinners/BarLoader"
+import SwiftInputCheckbox from "../inputs/swift-input-checkbox"
+import { lighten, darken, transparentize, readableColor } from "polished"
+import React, { Component } from "react"
+import { render } from "react-dom"
+import { SortableContainer, SortableElement, SortableHandle } from "react-sortable-hoc"
 //import { arrayMoveImmutable } from 'array-move'
-import { calendarFormats } from '../../helpers/calendar'
-import Modal from 'react-bootstrap/Modal'
-import SwiftForm from '../forms/swift-form'
-import SwiftDropdown from '../dropdowns/swift-dropdown'
-import { SwiftLinkContext } from '../providers'
+import { calendarFormats } from "../../helpers/calendar"
+import Modal from "react-bootstrap/Modal"
+import SwiftForm from "../forms/swift-form"
+import SwiftDropdown from "../dropdowns/swift-dropdown"
+import { SwiftLinkContext } from "../providers"
+import SwiftIcon from "../icons"
 
 const SwiftTableHandle = SortableHandle(() => <span>::</span>)
 
 const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactive_string, dropdown, setDropdown, config }) => {
-  //console.log('cell content', { rowKey, data, index, cellValue, column, inactive_string, dropdown, setDropdown  });
-
+  //console.log("cell content", { rowKey, data, index, cellValue, column, inactive_string, dropdown, setDropdown })
   return (
     <SwiftTableStyled.cellContent
-      textAlign={column['textAlign'] || undefined}
-      style={{ minWidth: column['minWidth'] || undefined, ...(config && config.style ? config.style : []) }}
+      type={column["type"]}
+      textAlign={column["textAlign"] || undefined}
+      style={{
+        minWidth: column["minWidth"] || undefined,
+        ...(config && config.style ? config.style : []),
+        ...(Object.keys(column).includes("style") ? column["style"] : {}),
+        ...(cellValue && typeof cellValue === "object" && Object.keys(cellValue).includes("style") ? cellValue["style"] : {}),
+      }}
     >
       {cellValue != null ? (
-        column['type'] == 'datetime' ? (
+        column["type"] == "datetime" ? (
           <Moment format="YYYY-MM-DD HH:mm:ss">{cellValue}</Moment>
-        ) : column['type'] == 'date' ? (
+        ) : column["type"] == "date" ? (
           <Moment format="YYYY-MM-DD">{cellValue}</Moment>
-        ) : column['type'] == 'datetime_recent' ? (
-          <Moment calendar={calendarFormats['datetime']}>{cellValue}</Moment>
-        ) : column['type'] == 'date_recent' ? (
-          <Moment calendar={calendarFormats['date']}>{cellValue}</Moment>
-        ) : column['type'] == 'boolean' ? (
+        ) : column["type"] == "datetime_recent" ? (
+          <Moment calendar={calendarFormats["datetime"]}>{cellValue}</Moment>
+        ) : column["type"] == "date_recent" ? (
+          <Moment calendar={calendarFormats["date"]}>{cellValue}</Moment>
+        ) : column["type"] == "stats" ? (
+          <ul>
+            {cellValue.items.map((elem) => (
+              <li>
+                <strong style={elem.style ?? {}}>{elem.value || 0}</strong>
+                <span>{elem.name}</span>
+              </li>
+            ))}
+          </ul>
+        ) : column["type"] == "icon" ? (
           <>
-            {cellValue && cellValue !== '0' && cellValue !== 0 ? (
+            <SwiftIcon i={cellValue.icon} color={cellValue.color ?? "#333"} />
+            {cellValue.value && <span>{cellValue.value}</span>}
+          </>
+        ) : column["type"] == "stack" ? (
+          <ul>
+            {cellValue.items.map((elem) => (
+              <li style={elem.style ?? {}}>{elem.name}</li>
+            ))}
+          </ul>
+        ) : column["type"] == "boolean" ? (
+          <>
+            {cellValue && cellValue !== "0" && cellValue !== 0 ? (
               <>
-                {column['icon'] ? (
-                  <div dangerouslySetInnerHTML={{ __html: column['icon'] }} />
+                {column["icon"] ? (
+                  <div dangerouslySetInnerHTML={{ __html: column["icon"] }} />
                 ) : (
                   <svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                     <path d="M21 6.285l-11.16 12.733-6.84-6.018 1.319-1.49 5.341 4.686 9.865-11.196 1.475 1.285z" />
                   </svg>
                 )}
               </>
-            ) : Object.keys(column).includes('showFalse') && column['showFalse'] ? (
+            ) : Object.keys(column).includes("showFalse") && column["showFalse"] ? (
               <>
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                   <path d="M12 2c5.514 0 10 4.486 10 10s-4.486 10-10 10-10-4.486-10-10 4.486-10 10-10zm0-2c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm5 15.538l-3.592-3.548 3.546-3.587-1.416-1.403-3.545 3.589-3.588-3.543-1.405 1.405 3.593 3.552-3.547 3.592 1.405 1.405 3.555-3.596 3.591 3.55 1.403-1.416z" />
                 </svg>
               </>
             ) : (
-              ''
+              ""
             )}
           </>
-        ) : column['type'] == 'number' && cellValue.length ? (
+        ) : column["type"] == "number" && cellValue.length ? (
           <>{Number(cellValue).toLocaleString()}</>
-        ) : column['type'] == 'dollar' ? (
+        ) : column["type"] == "dollar" ? (
           <>${Number(cellValue).toLocaleString()}</>
-        ) : column['type'] == 'media' && cellValue.length && cellValue.includes('yout') ? (
+        ) : column["type"] == "media" && cellValue.length && cellValue.includes("yout") ? (
           <div className="global_aspect_video">
             <iframe src={cellValue} />
           </div>
-        ) : column['type'] == 'bubbles' ? (
+        ) : column["type"] == "bubbles" ? (
           <ul className="swift_table_cell_bubbles">
             {cellValue.items.map((item) => (
-              <li className={item.plain ? 'plain' : null} style={item.style ?? {}}>
+              <li className={item.plain ? "plain" : null} style={item.style ?? {}}>
                 {item.name}
               </li>
             ))}
           </ul>
-        ) : column['type'] == 'media' && cellValue.length ? (
+        ) : column["type"] == "media" && cellValue.length ? (
           <div
             className="swift_table_cell_media"
             style={{
-              backgroundImage: 'url(' + cellValue + ')',
+              backgroundImage: "url(" + cellValue + ")",
             }}
           ></div>
-        ) : column['type'] == 'options' ? (
+        ) : column["type"] == "options" ? (
           <>
-            {data['options'].length > 0 && (
+            {data["options"].length > 0 && (
               <SwiftDropdown
                 trigger={
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -96,7 +122,7 @@ const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactiv
                 onTrigger={() => {
                   setDropdown(dropdown != rowKey ? rowKey : null)
                 }}
-                items={data['options'].map((option) => ({
+                items={data["options"].map((option) => ({
                   ...option,
                   onClick: () => {
                     setDropdown(null)
@@ -106,12 +132,14 @@ const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactiv
               />
             )}
           </>
+        ) : typeof cellValue === "object" && Object.keys(cellValue).includes("name") ? (
+          <>{cellValue.name}</>
         ) : (
-          <>
-            {cellValue} {index == 0 && data.config && data.config.inactive ? '(' + inactive_string + ')' : ''}
-          </>
+          <>{cellValue}</>
         )
       ) : null}
+
+      {index == 0 && data.config && data.config.inactive && inactive_string ? <>&nbsp;({inactive_string})</> : ""}
     </SwiftTableStyled.cellContent>
   )
 }
@@ -128,12 +156,12 @@ const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, 
 
   var cellHref = null
   var cellHandleClick = null
-  if (config && config.fields && config.fields[column['name']] && config.fields[column['name']]['link']) {
+  if (config && config.fields && config.fields[column["name"]] && config.fields[column["name"]]["link"]) {
     // link - cell level via config->field->link
-    cellHref = config.fields[column['name']]['link']
-  } else if (config && config.fields && config.fields[column['name']] && config.fields[column['name']]['handleClick']) {
+    cellHref = config.fields[column["name"]]["link"]
+  } else if (config && config.fields && config.fields[column["name"]] && config.fields[column["name"]]["handleClick"]) {
     // onclick - cell level via config->field->handleClick
-    cellHandleClick = () => config.fields[column['name']]['handleClick'](data)
+    cellHandleClick = () => config.fields[column["name"]]["handleClick"](data)
   } else if (link) {
     // link - row level but easier to only use row level to trigger hover state but apply actual link here in each cell level
     cellHref = link
@@ -144,7 +172,7 @@ const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, 
       {cellHref ? (
         <>
           {CustomLink ? (
-            <CustomLink href={cellHref} to={cellHref} className="swift-table-cell-link" target={cellHref.includes('http') ? '_blank' : ''}>
+            <CustomLink href={cellHref} to={cellHref} className="swift-table-cell-link" target={cellHref.includes("http") ? "_blank" : ""}>
               <SwiftTableCellContent
                 rowKey={rowKey}
                 cellValue={cellValue}
@@ -154,11 +182,11 @@ const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, 
                 inactive_string={inactive_string}
                 dropdown={dropdown}
                 setDropdown={setDropdown}
-                config={config && config.fields && config.fields[column['name']]}
+                config={config && config.fields && config.fields[column["name"]]}
               />
             </CustomLink>
           ) : (
-            <a href={cellHref} className="swift-table-cell-link" target={cellHref.includes('http') ? '_blank' : ''}>
+            <a href={cellHref} className="swift-table-cell-link" target={cellHref.includes("http") ? "_blank" : ""}>
               <SwiftTableCellContent
                 rowKey={rowKey}
                 cellValue={cellValue}
@@ -168,7 +196,7 @@ const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, 
                 inactive_string={inactive_string}
                 dropdown={dropdown}
                 setDropdown={setDropdown}
-                config={config && config.fields && config.fields[column['name']]}
+                config={config && config.fields && config.fields[column["name"]]}
               />
             </a>
           )}
@@ -184,7 +212,7 @@ const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, 
             inactive_string={inactive_string}
             dropdown={dropdown}
             setDropdown={setDropdown}
-            config={config && config.fields && config.fields[column['name']]}
+            config={config && config.fields && config.fields[column["name"]]}
           />
         </div>
       ) : (
@@ -198,7 +226,7 @@ const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, 
             inactive_string={inactive_string}
             dropdown={dropdown}
             setDropdown={setDropdown}
-            config={config && config.fields && config.fields[column['name']]}
+            config={config && config.fields && config.fields[column["name"]]}
           />
         </div>
       )}
@@ -211,6 +239,8 @@ const SortableRow = SortableElement(
     value: data,
     links,
     multiSelect,
+    checkable,
+    handleCheck,
     handleSelect,
     columns,
     rowsSelectedAll,
@@ -225,21 +255,21 @@ const SortableRow = SortableElement(
     if (links) {
       link = links
       Object.keys(data).forEach((key) => {
-        link = link.replace('{' + key + '}', data[key])
+        link = link.replace("{" + key + "}", data[key])
       })
     }
 
     // todo what if no ID?
-    const key = 'swiftTableBodyCell-' + data.id
+    const key = "swiftTableBodyCell-" + data.id
 
     var rowHref = null
     var rowHandleClick = null
-    if (data.config && data.config['handleClick']) {
+    if (data.config && data.config["handleClick"]) {
       // onclick - row level via cell->config->handleClick
-      rowHandleClick = () => data.config['handleClick'](data)
-    } else if (data && data['handleClick']) {
+      rowHandleClick = () => data.config["handleClick"](data)
+    } else if (data && data["handleClick"]) {
       // onclick - row level via cell->handleClick
-      rowHandleClick = () => data['handleClick'](data)
+      rowHandleClick = () => data["handleClick"](data)
     } else if (link) {
       // link - row level
       rowHref = link // BUT its hard to put a <a> here, so will just calculate this to see if we highlight on hover, and do link in cell still.
@@ -252,7 +282,7 @@ const SortableRow = SortableElement(
           links={rowHandleClick || rowHref ? 1 : 0}
           onClick={rowHandleClick ?? (() => {})}
         >
-          {multiSelect && (
+          {multiSelect ? (
             <SwiftTableStyled.cell checkbox>
               <div>
                 <SwiftInputCheckbox
@@ -261,20 +291,26 @@ const SortableRow = SortableElement(
                 />
               </div>
             </SwiftTableStyled.cell>
-          )}
+          ) : checkable ? (
+            <SwiftTableStyled.cell checkbox>
+              <div>
+                <SwiftInputCheckbox checked={data.checked ? true : false} onChange={(e) => handleCheck(data.id, !data.checked)} />
+              </div>
+            </SwiftTableStyled.cell>
+          ) : null}
           {columns.map((column, index) => {
-            var cellValue = data[column['name']]
+            var cellValue = data[column["name"]]
             //console.log('swift-table.tsx - column', column)
             //console.log('swift-table.tsx - cellValue', cellValue)
-            if ((cellValue == null || cellValue == '') && column['name_fallback'] && data[column['name_fallback']] != null) {
-              cellValue = data[column['name_fallback']]
+            if ((cellValue == null || cellValue == "") && column["name_fallback"] && data[column["name_fallback"]] != null) {
+              cellValue = data[column["name_fallback"]]
             }
 
             //console.log('swift-table.tsx - cellValue2', cellValue)
             return (
               <SwiftTableStyled.cell
                 key={`${key}-field${index}`}
-                data-type={column['type']}
+                data-type={column["type"]}
                 full={column.full}
                 nowrap={column.nowrap}
                 sortable={sortable}
@@ -292,6 +328,9 @@ const SortableRow = SortableElement(
                   dropdown={dropdown}
                   setDropdown={setDropdown}
                 />
+                {cellValue !== null && typeof cellValue === "object" && Object.keys(cellValue).includes("tooltip") && (
+                  <span className="swift_table_cell_tooltip">{cellValue.tooltip}</span>
+                )}
               </SwiftTableStyled.cell>
             )
           })}
@@ -307,10 +346,11 @@ const SortableRow = SortableElement(
             {data.children.map((elemChild) => (
               <SwiftTableStyled.row>
                 {columns.map((column, index) => {
-                  var cellValue = elemChild[column['name']]
-                  if ((cellValue == null || cellValue == '') && column['name_fallback'] && elemChild[column['name_fallback']] != null) {
-                    cellValue = elemChild[column['name_fallback']]
+                  var cellValue = elemChild[column["name"]]
+                  if ((cellValue == null || cellValue == "") && column["name_fallback"] && elemChild[column["name_fallback"]] != null) {
+                    cellValue = elemChild[column["name_fallback"]]
                   }
+
                   if (index == 0) {
                     cellValue = <>&#8627; {cellValue}</>
                   }
@@ -318,11 +358,11 @@ const SortableRow = SortableElement(
                   if (links) {
                     linkChild = links
                     Object.keys(data).forEach((key) => {
-                      linkChild = linkChild.replace('{' + key + '}', elemChild[key])
+                      linkChild = linkChild.replace("{" + key + "}", elemChild[key])
                     })
                   }
                   return (
-                    <SwiftTableStyled.cell key={`cell_${column.name}`} data-type={column['type']}>
+                    <SwiftTableStyled.cell key={`cell_${column.name}`} data-type={column["type"]}>
                       <SwiftTableCell
                         link={linkChild}
                         config={data.config}
@@ -352,6 +392,8 @@ const SortableTable = SortableContainer(
     items,
     links,
     multiSelect,
+    checkable,
+    handleCheck,
     handleSelect,
     columns,
     rowsSelectedAll,
@@ -372,10 +414,12 @@ const SortableTable = SortableContainer(
             columns={columns}
             multiSelect={multiSelect}
             handleSelect={handleSelect}
+            checkable={checkable}
+            handleCheck={handleCheck}
             links={links}
             index={index}
             value={value}
-            key={'swiftTableBodyCell-' + (value.id || index)}
+            key={"swiftTableBodyCell-" + (value.id || index)}
             disabled={!dragSortable ?? false}
             sortable={sortable}
             dragSortable={dragSortable}
@@ -401,6 +445,8 @@ const SwiftTable = (props) => {
     filterLimit,
     links,
     multiSelect,
+    checkable,
+    handleCheck,
     rowsSelected,
     setRowsSelected,
     rowsSelectedAll,
@@ -416,7 +462,7 @@ const SwiftTable = (props) => {
   const [dropdown, setDropdown] = useState(null)
 
   const handleSelect = (id, checked, shiftKey) => {
-    console.log('ST handleSelect', id, checked, shiftKey)
+    console.log("ST handleSelect", id, checked, shiftKey)
 
     if (id) {
       //console.log('ST - specific checked', id)
@@ -427,22 +473,22 @@ const SwiftTable = (props) => {
         // shift key press
         var ids = []
         var a = data.findIndex((c) => {
-          return c['id'] == rowsSelected[rowsSelected.length - 1]
+          return c["id"] == rowsSelected[rowsSelected.length - 1]
         })
         var b = data.findIndex((c) => {
-          return c['id'] == id
+          return c["id"] == id
         })
         let clientA = Math.min(a, b)
         let clientB = Math.max(a, b)
         //console.log('shift event', clientA, clientB, rowsSelected)
         for (var i = clientA; i <= clientB; i++) {
-          let idCurrent = data[i]['id']
+          let idCurrent = data[i]["id"]
           if (!rowsSelected.includes(idCurrent)) {
             ids = [idCurrent, ...ids]
           }
         }
       }
-      console.log('ST - checked, ids', ids)
+      console.log("ST - checked, ids", ids)
 
       if (checked) {
         setRowsSelected([...rowsSelected, ...ids])
@@ -454,6 +500,11 @@ const SwiftTable = (props) => {
         }*/
       } else {
         if (rowsSelectedAll) {
+          // all pages selected, unchecking individual - here we could do a complex "excluded list"
+          // but short term cop-out is just deselecting all so there is less confusion.
+          setRowsSelectedAll(null)
+          setRowsSelected([])
+        } else if (rowsSelectedAll) {
           setRowsSelectedAll(null)
           var rows = data.filter((elem) => elem.id != id).map((elem) => elem.id)
           setRowsSelected(rows)
@@ -472,9 +523,9 @@ const SwiftTable = (props) => {
         if (filterLimit && filterTotal && filterLimit < filterTotal) {
           // we specified a filter limit (current page) and total (all matched) and there appears to be more pages
           // so open clarify modal?
-          setModal('swift_table_selected_all_clarify')
+          setModal("swift_table_selected_all_clarify")
         } else {
-          setRowsSelectedAll('all')
+          setRowsSelectedAll("all")
         }
       } else {
         setRowsSelectedAll(null)
@@ -495,32 +546,33 @@ const SwiftTable = (props) => {
             {columnsVisible && (
               <SwiftTableStyled.header>
                 <SwiftTableStyled.row>
-                  {multiSelect && (
+                  {multiSelect ? (
                     <SwiftTableStyled.headerCell checkbox>
                       <SwiftInputCheckbox
                         checked={rowsSelectedAll ? true : false}
                         onChange={(e) => handleSelect(null, e.currentTarget.checked, e.nativeEvent.shiftKey)}
                       />
                     </SwiftTableStyled.headerCell>
-                  )}
-                  {columns.map((column) => (
+                  ) : null}
+                  {columns.map((column, i) => (
                     <SwiftTableStyled.headerCell
-                      key={'swiftTableHeaderCell-' + (column['id'] ?? column['name'])}
-                      active={column['name'] == sortField ? true : false}
-                      reverse={column['name'] == sortField && sortDirection != 'asc' ? true : false}
+                      key={"swiftTableHeaderCell-" + (column["id"] ?? column["name"])}
+                      active={column["name"] == sortField ? true : false}
+                      reverse={column["name"] == sortField && sortDirection != "asc" ? true : false}
                       sortable={sortable}
                       dragSortable={dragSortable}
+                      colSpan={i == 0 && checkable ? 2 : 1}
                     >
-                      {column['type'] != 'options' ? (
+                      {column["type"] != "options" ? (
                         <div
                           onClick={
-                            Object.keys(column).includes('sortable') && column['sortable'] && props.sortUpdate
-                              ? () => props.sortUpdate(column['name'])
+                            Object.keys(column).includes("sortable") && column["sortable"] && props.sortUpdate
+                              ? () => props.sortUpdate(column["name"])
                               : () => {}
                           }
                         >
-                          <span title={column['title']} dangerouslySetInnerHTML={{ __html: column['icon'] || column['title'] }}></span>
-                          {sortable && Object.keys(column).includes('sortable') && column['sortable'] && (
+                          <span title={column["title"]} dangerouslySetInnerHTML={{ __html: column["icon"] || column["title"] }}></span>
+                          {sortable && Object.keys(column).includes("sortable") && column["sortable"] && (
                             <svg
                               className="swift_table_header_cell_sort"
                               xmlns="http://www.w3.org/2000/svg"
@@ -546,6 +598,8 @@ const SwiftTable = (props) => {
               rowsSelected={rowsSelected}
               columns={columns}
               multiSelect={multiSelect}
+              checkable={checkable}
+              handleCheck={handleCheck}
               handleSelect={handleSelect}
               links={links}
               items={data}
@@ -553,9 +607,8 @@ const SwiftTable = (props) => {
               dragSortable={dragSortable}
               distance={5}
               onSortEnd={({ oldIndex, newIndex }) => {
-                console.log('Swift-Tools - SwiftTable - OnSortEnd triggered, but not implemented.')
-                //dragSortUpdate(arrayMoveImmutable(data, oldIndex, newIndex))
-                //dragSortUpdate(data)
+                let newData = arrayMove(data, oldIndex, newIndex)
+                dragSortUpdate(newData.map((elem, i) => ({ ...elem, sort_order: i })))
               }}
               useDragHandle={true}
               //getHelperDimensions={({ node }) => ({
@@ -590,7 +643,7 @@ const SwiftTable = (props) => {
         </SwiftTableStyled.loading>
       )}
 
-      <Modal show={modal == 'swift_table_selected_all_clarify' ? true : false} onHide={() => setModal(null)}>
+      <Modal show={modal == "swift_table_selected_all_clarify" ? true : false} onHide={() => setModal(null)}>
         <Modal.Header closeButton>
           <Modal.Title>Select All Rows</Modal.Title>
         </Modal.Header>
@@ -599,39 +652,50 @@ const SwiftTable = (props) => {
 
           <SwiftForm
             onSubmit={(vals) => {
-              setRowsSelectedAll(vals.selection)
-              setRowsSelected([])
-              setModal(null)
+              if (vals.selection == "visible") {
+                setRowsSelectedAll(null)
+                setRowsSelected(data.map((elem) => elem.id))
+                setModal(null)
+              } else if (vals.selection == "all") {
+                setRowsSelectedAll(true)
+                setRowsSelected([])
+                setModal(null)
+              } else {
+                setRowsSelectedAll(null)
+                setRowsSelected([])
+                setModal(null)
+              }
             }}
             fields={[
+              { type: "subtitle", label: "What would you like to select?" },
               {
-                key: 'selection',
-                value: 'visible',
+                key: "selection",
+                value: "visible",
                 values: [
                   {
-                    name: 'All visible rows (' + Math.min(filterLimit, filterTotal) + ')',
-                    value: 'visible',
+                    name: "This page only (" + Math.min(filterLimit, filterTotal) + " items)",
+                    value: "visible",
                   },
                   {
-                    name: 'All rows matching this filter (' + filterTotal + ')',
-                    value: 'all',
+                    name: "All pages (" + filterTotal + " items)",
+                    value: "all",
                   },
                   ...(rowsSelected.length > 0 || rowsSelectedAll
                     ? [
                         {
-                          name: 'Deselect all rows',
-                          value: '',
+                          name: "Deselect all rows",
+                          value: "",
                         },
                       ]
                     : []),
                 ],
-                type: 'radio',
+                type: "radio",
               },
               {
-                key: 'submit',
-                type: 'submit',
-                color: 'primary',
-                label: 'Select',
+                key: "submit",
+                type: "submit",
+                color: "primary",
+                label: "Select",
               },
             ]}
           />
@@ -652,6 +716,8 @@ SwiftTable.defaultProps = {
   isLoading: false,
   links: undefined,
   multiSelect: false,
+  checkable: false,
+  handleCheck: () => {},
   rowsSelected: [],
   setRowsSelected: () => {},
   rowsSelectedAll: null,
@@ -659,7 +725,7 @@ SwiftTable.defaultProps = {
   sortable: false,
   dragSortable: false,
   dragSortUpdate: () => {},
-  inactive_string: 'Inactive',
+  inactive_string: "Inactive",
   columnsVisible: true,
 }
 

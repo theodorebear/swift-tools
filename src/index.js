@@ -1,8 +1,8 @@
-import { SwiftForm } from './lib'
-import SwiftTable from './lib/components/tables/swift-table'
-import ReactDOM from 'react-dom'
-import styled from 'styled-components'
-import { SwiftGridRow, SwiftGridColumn } from './lib/components/grid'
+import { SwiftForm } from "./lib"
+import SwiftTable from "./lib/components/tables/swift-table"
+import ReactDOM from "react-dom"
+import styled from "styled-components"
+import { SwiftGridRow, SwiftGridColumn } from "./lib/components/grid"
 
 const AppStyled = styled.div`
 	min-height: 100vh;
@@ -12,6 +12,9 @@ const AppStyled = styled.div`
 	align-items: center;
 	box-sizing: border-box;
 	background: #fafafa;
+
+	opacity: 1;
+
 	#app-form {
 		width: 100%;
 		max-width: 820px;
@@ -55,21 +58,21 @@ function App() {
 				</Row>*/}
 
 				<SwiftTable
-					columns={[{ title: 'Other', name: 'name', type: 'bubbles' }]}
+					columns={[{ title: "Other", name: "name", type: "bubbles" }]}
 					data={[
 						{
 							name: {
-								color: 'orange',
+								color: "orange",
 								items: [
-									{ name: 'ACT' },
-									{ plain: 1, name: '5***********4432' },
-									{ name: 'EXP' },
-									{ plain: 1, name: '05/24' },
+									{ name: "ACT" },
+									{ plain: 1, name: "5***********4432" },
+									{ name: "EXP" },
+									{ plain: 1, name: "05/24" },
 								],
 							},
 						},
 					]}
-					links={'/agent/agents/{id}'}
+					links={"/agent/agents/{id}"}
 				/>
 
 				{/*<SwiftForm
@@ -345,4 +348,4 @@ function App() {
 	)
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<App />, document.getElementById("root"))

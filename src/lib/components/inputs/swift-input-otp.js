@@ -315,7 +315,7 @@ const SwiftInputOTP = (props) => {
 }
 SwiftInputOTP.defaultProps = {
   numInputs: 6,
-  onChange: (otp) => console.log(otp),
+  onChange: (otp) => {},
   isDisabled: false,
   shouldAutoFocus: false,
   value: '',

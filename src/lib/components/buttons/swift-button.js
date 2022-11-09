@@ -68,6 +68,7 @@ const SwiftButton = (props) => {
 }
 SwiftButton.defaultProps = {
   theme: 'default',
+  size: 'medium',
 }
 
 export default SwiftButton

@@ -1,5 +1,14 @@
 import styled from 'styled-components'
 
+export const SwiftFormButtonListStyled = styled.div`
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 8px;
+	> div {
+		margin-right: 8px;
+	}
+`
+
 export const SwiftFormStyled = styled.div`
 	.form {
 	}
@@ -29,6 +38,9 @@ export const SwiftFormStyled = styled.div`
 	}
 
 	.swift-form-element {
+		button {
+			width: 100%;
+		}
 	}
 
 	${(props) =>

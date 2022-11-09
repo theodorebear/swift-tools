@@ -113,8 +113,8 @@ export const SwiftButtonStyled = styled.button`
     }
 
     ${
-      props.size == 'small' &&
-      `
+      props.size == 'small'
+        ? `
       padding: 8px 12px;
       font-size:11px;
       line-height: 15px;
@@ -124,7 +124,30 @@ export const SwiftButtonStyled = styled.button`
         height:13px;
       }
     `
+        : props.size == 'medium'
+        ? `
+      padding: 9px 14px;
+      font-size:13px;
+      line-height: 16px;
+      border-width:1.75px;
+      svg {
+        width:15px;
+        height:15px;
+      }
+    `
+        : `
+      padding: 9px 18px;
+      font-size: 14px;
+      line-height: 32px;
+      border-width:2px;
+      svg {
+        width:18px;
+        height:18px;
+      }
+
+    `
     }
+
 
       &.disabled {
         cursor: not-allowed !important;

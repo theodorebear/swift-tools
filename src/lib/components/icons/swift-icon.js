@@ -646,8 +646,7 @@ const icons = {
 const SwiftIconStyled = styled.i`
   svg {
     display: block;
-    ${(props) =>
-      props.color && props.color == 'primary' ? `fill:${props.theme.color_primary};` : props.color ? `fill:${props.color};` : ``}
+    ${(props) => (props.color && props.color == 'primary' ? `fill:${'#1b6191'};` : props.color ? `fill:${props.color};` : ``)}
   }
 `
 

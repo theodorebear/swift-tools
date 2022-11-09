@@ -94,11 +94,11 @@ export const SwiftDropdownStyled = styled.div`
             transform: rotate(-90deg);
           }
           &:hover {
-            background: ${(props) => transparentize(0.95, props.theme.color_primary)};
+            background: ${(props) => transparentize(0.95, props.activeColor)};
             svg {
               opacity: 1;
               & path {
-                fill: ${(props) => props.theme.color_primary};
+                fill: ${(props) => '#1b6191'};
               }
             }
           }
@@ -107,12 +107,12 @@ export const SwiftDropdownStyled = styled.div`
           padding-left: 48px;
         }
         &.active > a {
-          background: ${(props) => transparentize(0.9, props.theme.color_primary)};
-          color: ${(props) => props.theme.color_primary};
+          background: ${(props) => transparentize(0.9, props.activeColor)};
+          color: ${(props) => '#1b6191'};
           padding-left: 48px;
           > svg {
             & path {
-              fill: ${(props) => props.theme.color_primary};
+              fill: ${(props) => '#1b6191'};
             }
             opacity: 1;
           }

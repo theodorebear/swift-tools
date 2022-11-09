@@ -12,8 +12,8 @@ import { SortableContainer, SortableElement, SortableHandle } from "react-sortab
 //import { arrayMoveImmutable } from 'array-move'
 import { calendarFormats } from "../../helpers/calendar"
 import Modal from "react-bootstrap/Modal"
-import SwiftForm from "../forms/swift-form"
-import SwiftDropdown from "../dropdowns/swift-dropdown"
+import SwiftForm from "../forms"
+import SwiftDropdown from "../dropdowns"
 import { SwiftLinkContext } from "../providers"
 import SwiftIcon from "../icons"
 
@@ -21,6 +21,7 @@ const SwiftTableHandle = SortableHandle(() => <span>::</span>)
 
 const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactive_string, dropdown, setDropdown, config }) => {
   //console.log("cell content", { rowKey, data, index, cellValue, column, inactive_string, dropdown, setDropdown })
+  //return <>hi</>
   return (
     <SwiftTableStyled.cellContent
       type={column["type"]}

@@ -44,6 +44,7 @@
     "@babel/preset-env": "^7.16.4",
     "@babel/preset-react": "^7.16.0",
     "@babel/runtime": "^7.17.2",
+    "array-move": "^4.0.0",
     "card-validator": "^8.1.1",
     "classnames": "^2.3.1",
     "formik": "^2.2.9",

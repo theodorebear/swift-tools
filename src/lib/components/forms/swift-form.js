@@ -311,13 +311,7 @@ const SwiftFormItem = (props) => {
             color={item.color ?? undefined}
             icon={item.icon ?? undefined}
             fillType={item.fillType || undefined}
-            onClick={
-              item.action && item.action == "back" && step > 1
-                ? () => setStep(step - 1)
-                : item.action && item.action == "submit"
-                ? () => submitForm()
-                : item.onClick ?? undefined
-            }
+            onClick={item.action && item.action == "back" && step > 1 ? () => setStep(step - 1) : item.action && item.action == "submit" ? () => submitForm() : item.onClick ?? undefined}
             size={inline ? "large" : undefined}
           >
             {item.label}
@@ -392,9 +386,7 @@ const SwiftFormItem = (props) => {
       ) : item.type === "collection" ? (
         <SwiftInputCollection
           {...item}
-          value={
-            values[item.key] ? (values[item.key].constructor.name == "Object" ? Object.entries(values[item.key]) : values[item.key]) : []
-          }
+          value={values[item.key] ? (values[item.key].constructor.name == "Object" ? Object.entries(values[item.key]) : values[item.key]) : []}
           schema={
             item.schema || [
               { type: "text", label: "Label" },
@@ -493,36 +485,36 @@ const SwiftFormItem = (props) => {
         />*/
       item.type === "credit_card" ? (
         <SwiftCreditCard setBraintreeTokenize={setBraintreeTokenize} />
-      ) : item.type === "code" ? (
-        <SwiftInputCode
-          fullWidth
-          variant="filled"
-          label={item.label}
-          name={item.key}
-          value={values[item.key] ?? ""}
-          disabled={item.disabled ?? undefined}
-          onBlur={(e) => {
-            handleBlur(e)
-            if (item.onBlur) {
-              item.onBlur(e)
-            }
-          }}
-          format={item.format || false}
-          autoCorrect={item.autoCorrect}
-          autoComplete={item.autoComplete}
-          autoFocus={item.autoFocus ?? undefined}
-          helperText={touched[item.key] && errors[item.key]}
-          error={Boolean(touched[item.key] && errors[item.key])}
-          //onChange={handleChange}
-          onChange={(e) => {
-            //console.log("code field updateing", e)
-            if (item.onChange) {
-              item.onChange(e)
-            }
-            setFieldValue(item.key, e)
-          }}
-        />
-      ) : item.type === "color" ? (
+      ) : // ) : item.type === "code" ? (
+      //   <SwiftInputCode
+      //     fullWidth
+      //     variant="filled"
+      //     label={item.label}
+      //     name={item.key}
+      //     value={values[item.key] ?? ""}
+      //     disabled={item.disabled ?? undefined}
+      //     onBlur={(e) => {
+      //       handleBlur(e)
+      //       if (item.onBlur) {
+      //         item.onBlur(e)
+      //       }
+      //     }}
+      //     format={item.format || false}
+      //     autoCorrect={item.autoCorrect}
+      //     autoComplete={item.autoComplete}
+      //     autoFocus={item.autoFocus ?? undefined}
+      //     helperText={touched[item.key] && errors[item.key]}
+      //     error={Boolean(touched[item.key] && errors[item.key])}
+      //     //onChange={handleChange}
+      //     onChange={(e) => {
+      //       //console.log("code field updateing", e)
+      //       if (item.onChange) {
+      //         item.onChange(e)
+      //       }
+      //       setFieldValue(item.key, e)
+      //     }}
+      //   />
+      item.type === "color" ? (
         <SwiftInputColor
           fullWidth
           variant="filled"
@@ -544,7 +536,7 @@ const SwiftFormItem = (props) => {
           onChange={(val) => {
             //console.log("COLOR CHANGE", val)
             if (item.onChange) {
-              item.onChange(e)
+              item.onChange(val)
             }
             setFieldValue(item.key, val)
           }}
@@ -629,10 +621,7 @@ const SwiftFormItem = (props) => {
               item.onAddressUpdate(p)
             }
             fields.forEach((otherItem) => {
-              if (
-                otherItem.chain &&
-                (otherItem.chain.field == item.key || (otherItem.chain.fields && otherItem.chain.fields.includes(item.key)))
-              ) {
+              if (otherItem.chain && (otherItem.chain.field == item.key || (otherItem.chain.fields && otherItem.chain.fields.includes(item.key)))) {
                 if (otherItem.chain.type == "zip" && p.address_components.filter((elem) => elem.types.includes("postal_code")).length) {
                   setFieldValue(otherItem.key, p.address_components.filter((elem) => elem.types.includes("postal_code"))[0].short_name)
                 }
@@ -649,8 +638,7 @@ const SwiftFormItem = (props) => {
           myRefs={myRefs}
           maskLen={
             item.mask === "card_cvv"
-              ? fields.filter((fieldOther) => fieldOther.mask == "card_number").length > 0 &&
-                values[fields.filter((fieldOther) => fieldOther.mask == "card_number")[0].key]
+              ? fields.filter((fieldOther) => fieldOther.mask == "card_number").length > 0 && values[fields.filter((fieldOther) => fieldOther.mask == "card_number")[0].key]
                 ? values[fields.filter((fieldOther) => fieldOther.mask == "card_number")[0].key].cvv_len
                 : 3
               : undefined
@@ -678,10 +666,7 @@ const SwiftFormItem = (props) => {
                     if (fields[fieldsIndexNext].type == "submit" && submitRef && submitRef.current) {
                       // last form element is complete, next form element is submit button, do we autosubmit here? maybe make it an option.
                       // submitRef.current.submit()
-                    } else if (
-                      typeof myRefs.current[fieldsIndexNext] !== "undefined" &&
-                      typeof myRefs.current[fieldsIndexNext].focus !== "undefined"
-                    ) {
+                    } else if (typeof myRefs.current[fieldsIndexNext] !== "undefined" && typeof myRefs.current[fieldsIndexNext].focus !== "undefined") {
                       myRefs.current[fieldsIndexNext].focus()
                     }
                   }, 75)
@@ -694,10 +679,7 @@ const SwiftFormItem = (props) => {
               var valNew = val
 
               fields.forEach((otherItem) => {
-                if (
-                  otherItem.chain &&
-                  (otherItem.chain.field == item.key || (otherItem.chain.fields && otherItem.chain.fields.includes(item.key)))
-                ) {
+                if (otherItem.chain && (otherItem.chain.field == item.key || (otherItem.chain.fields && otherItem.chain.fields.includes(item.key)))) {
                   //console.log(valNew)
                   if (!valNew || !valNew.length) {
                     setFieldValue(otherItem.key, "")
@@ -877,12 +859,7 @@ const SwiftForm = (props) => {
             fields
               .filter((field) => field.type == "collection")
               .forEach((field) => {
-                console.log(
-                  "collection field",
-                  JSON.stringify(valsSubmit[field.key]),
-                  valsSubmit[field.key] ? 1 : 0,
-                  valsSubmit[field.key].length > 0
-                )
+                console.log("collection field", JSON.stringify(valsSubmit[field.key]), valsSubmit[field.key] ? 1 : 0, valsSubmit[field.key].length > 0)
                 if (valsSubmit[field.key] && valsSubmit[field.key].length > 0) {
                   console.log("RUNNING", valsSubmit[field.key])
                   valsSubmit[field.key].forEach((fieldRow, i) => {
@@ -1026,6 +1003,7 @@ const SwiftForm = (props) => {
               item.gate.forEach((gate) => {
                 if (
                   (Object.keys(gate).includes("value") && values[gate.field] != gate.value) ||
+                  (Object.keys(gate).includes("present") && gate.present && !values[gate.field]) ||
                   (Object.keys(gate).includes("contains") && !(values[gate.field] || "").includes(gate.contains))
                 ) {
                   //console.log("gate FAILED", gate)
@@ -1034,6 +1012,7 @@ const SwiftForm = (props) => {
               })
               if (!gateSuccess) return
             }
+
             // is field part of a multi-step form? skip.
             if (steps > 1 && item.step && item.step != step) {
               return
@@ -1046,16 +1025,11 @@ const SwiftForm = (props) => {
                 errors[item.key] = "This field is required!"
               } else if (
                 item.validate === "email" &&
-                !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(
-                  values[item.key]
-                ) &&
+                !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(values[item.key]) &&
                 values[item.key] !== "root"
               ) {
                 errors[item.key] = "An email address is required."
-              } else if (
-                item.validate === "phone" &&
-                !/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(values[item.key])
-              ) {
+              } else if (item.validate === "phone" && !/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(values[item.key])) {
                 errors[item.key] = "Enter a valid phone number."
               } else if (item.validate === "zip_code" && !values[item.key].complete) {
                 errors[item.key] = "Enter a valid zip code."
@@ -1098,20 +1072,7 @@ const SwiftForm = (props) => {
           return errors
         }}
       >
-        {({
-          values,
-          status,
-          errors,
-          touched,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          setFieldValue,
-          setValues,
-          setFieldTouched,
-          theme,
-        }) => {
+        {({ values, status, errors, touched, handleBlur, handleChange, handleSubmit, isSubmitting, setFieldValue, setValues, setFieldTouched, theme }) => {
           let formRows = props.gridRows || 1
           let formCols = inline ? fields.length : props.cols || 4
           let formGap = props.theme == "minimal" ? 0 : props.gridGap ?? 3
@@ -1119,10 +1080,7 @@ const SwiftForm = (props) => {
           return (
             <form onSubmit={handleSubmit} autoComplete="off" autoCorrect="off">
               <SwiftFormSubmitRef ref={submitRef} />
-              {errors &&
-              Object.keys(errors).length > 0 &&
-              Object.keys(errors).some((elem) => Object.keys(touched).includes(elem)) &&
-              fields.length > 4 ? (
+              {errors && Object.keys(errors).length > 0 && Object.keys(errors).some((elem) => Object.keys(touched).includes(elem)) && fields.length > 4 ? (
                 <div className={classNames("status", "error")}>
                   <span>
                     Error with these fields:{" "}
@@ -1156,6 +1114,7 @@ const SwiftForm = (props) => {
                       item.gate.forEach((gate) => {
                         if (
                           (Object.keys(gate).includes("value") && values[gate.field] != gate.value) ||
+                          (Object.keys(gate).includes("present") && gate.present && !values[gate.field]) ||
                           (Object.keys(gate).includes("contains") && !(values[gate.field] || "").includes(gate.contains))
                         ) {
                           //console.log("gate FAILED", gate)
@@ -1175,12 +1134,7 @@ const SwiftForm = (props) => {
                       //console.log(values['card_number'].includes('_'))
                       //console.log("----2")
                       //console.log("card number test",values['card_number'],(!values['card_number'] || !values['card_number']['complete']))
-                      if (
-                        props.type == "card" &&
-                        props.theme == "minimal" &&
-                        item.type == "text" &&
-                        (!values["card_number"] || !values["card_number"]["complete"])
-                      ) {
+                      if (props.type == "card" && props.theme == "minimal" && item.type == "text" && (!values["card_number"] || !values["card_number"]["complete"])) {
                         if (item.mask != "card_number") {
                           inlineItemWidth = 0
                           inlineItemFlex = null

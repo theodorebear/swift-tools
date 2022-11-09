@@ -9,7 +9,7 @@ import { lighten, darken, transparentize, readableColor } from "polished"
 import React, { Component } from "react"
 import { render } from "react-dom"
 import { SortableContainer, SortableElement, SortableHandle } from "react-sortable-hoc"
-//import { arrayMoveImmutable } from 'array-move'
+import { arrayMoveImmutable } from "array-move"
 import { calendarFormats } from "../../helpers/calendar"
 import Modal from "react-bootstrap/Modal"
 import SwiftForm from "../forms"
@@ -236,22 +236,7 @@ const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, 
 }
 
 const SortableRow = SortableElement(
-  ({
-    value: data,
-    links,
-    multiSelect,
-    checkable,
-    handleCheck,
-    handleSelect,
-    columns,
-    rowsSelectedAll,
-    rowsSelected,
-    sortable,
-    dragSortable,
-    inactive_string,
-    dropdown,
-    setDropdown,
-  }) => {
+  ({ value: data, links, multiSelect, checkable, handleCheck, handleSelect, columns, rowsSelectedAll, rowsSelected, sortable, dragSortable, inactive_string, dropdown, setDropdown }) => {
     var link = null
     if (links) {
       link = links
@@ -278,11 +263,7 @@ const SortableRow = SortableElement(
 
     return (
       <Fragment key={key}>
-        <SwiftTableStyled.row
-          inactive={data.config && data.config.inactive ? 1 : 0}
-          links={rowHandleClick || rowHref ? 1 : 0}
-          onClick={rowHandleClick ?? (() => {})}
-        >
+        <SwiftTableStyled.row inactive={data.config && data.config.inactive ? 1 : 0} links={rowHandleClick || rowHref ? 1 : 0} onClick={rowHandleClick ?? (() => {})}>
           {multiSelect ? (
             <SwiftTableStyled.cell checkbox>
               <div>
@@ -309,14 +290,7 @@ const SortableRow = SortableElement(
 
             //console.log('swift-table.tsx - cellValue2', cellValue)
             return (
-              <SwiftTableStyled.cell
-                key={`${key}-field${index}`}
-                data-type={column["type"]}
-                full={column.full}
-                nowrap={column.nowrap}
-                sortable={sortable}
-                dragSortable={dragSortable}
-              >
+              <SwiftTableStyled.cell key={`${key}-field${index}`} data-type={column["type"]} full={column.full} nowrap={column.nowrap} sortable={sortable} dragSortable={dragSortable}>
                 <SwiftTableCell
                   link={link}
                   config={data.config}
@@ -329,9 +303,7 @@ const SortableRow = SortableElement(
                   dropdown={dropdown}
                   setDropdown={setDropdown}
                 />
-                {cellValue !== null && typeof cellValue === "object" && Object.keys(cellValue).includes("tooltip") && (
-                  <span className="swift_table_cell_tooltip">{cellValue.tooltip}</span>
-                )}
+                {cellValue !== null && typeof cellValue === "object" && Object.keys(cellValue).includes("tooltip") && <span className="swift_table_cell_tooltip">{cellValue.tooltip}</span>}
               </SwiftTableStyled.cell>
             )
           })}
@@ -389,22 +361,7 @@ const SortableRow = SortableElement(
 )
 
 const SortableTable = SortableContainer(
-  ({
-    items,
-    links,
-    multiSelect,
-    checkable,
-    handleCheck,
-    handleSelect,
-    columns,
-    rowsSelectedAll,
-    rowsSelected,
-    sortable,
-    dragSortable,
-    inactive_string,
-    dropdown,
-    setDropdown,
-  }) => {
+  ({ items, links, multiSelect, checkable, handleCheck, handleSelect, columns, rowsSelectedAll, rowsSelected, sortable, dragSortable, inactive_string, dropdown, setDropdown }) => {
     //console.log('swift-table.tsx - items', items)
     return (
       <SwiftTableStyled.body>
@@ -549,10 +506,7 @@ const SwiftTable = (props) => {
                 <SwiftTableStyled.row>
                   {multiSelect ? (
                     <SwiftTableStyled.headerCell checkbox>
-                      <SwiftInputCheckbox
-                        checked={rowsSelectedAll ? true : false}
-                        onChange={(e) => handleSelect(null, e.currentTarget.checked, e.nativeEvent.shiftKey)}
-                      />
+                      <SwiftInputCheckbox checked={rowsSelectedAll ? true : false} onChange={(e) => handleSelect(null, e.currentTarget.checked, e.nativeEvent.shiftKey)} />
                     </SwiftTableStyled.headerCell>
                   ) : null}
                   {columns.map((column, i) => (
@@ -565,22 +519,10 @@ const SwiftTable = (props) => {
                       colSpan={i == 0 && checkable ? 2 : 1}
                     >
                       {column["type"] != "options" ? (
-                        <div
-                          onClick={
-                            Object.keys(column).includes("sortable") && column["sortable"] && props.sortUpdate
-                              ? () => props.sortUpdate(column["name"])
-                              : () => {}
-                          }
-                        >
+                        <div onClick={Object.keys(column).includes("sortable") && column["sortable"] && props.sortUpdate ? () => props.sortUpdate(column["name"]) : () => {}}>
                           <span title={column["title"]} dangerouslySetInnerHTML={{ __html: column["icon"] || column["title"] }}></span>
                           {sortable && Object.keys(column).includes("sortable") && column["sortable"] && (
-                            <svg
-                              className="swift_table_header_cell_sort"
-                              xmlns="http://www.w3.org/2000/svg"
-                              width="24"
-                              height="24"
-                              viewBox="0 0 24 24"
-                            >
+                            <svg className="swift_table_header_cell_sort" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                               <path d="M14 2h-7.229l7.014 7h-13.785v6h13.785l-7.014 7h7.229l10-10z" />
                             </svg>
                           )}
@@ -608,7 +550,7 @@ const SwiftTable = (props) => {
               dragSortable={dragSortable}
               distance={5}
               onSortEnd={({ oldIndex, newIndex }) => {
-                let newData = arrayMove(data, oldIndex, newIndex)
+                let newData = arrayMoveImmutable(data, oldIndex, newIndex)
                 dragSortUpdate(newData.map((elem, i) => ({ ...elem, sort_order: i })))
               }}
               useDragHandle={true}

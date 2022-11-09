@@ -56,7 +56,11 @@ export const useInterval = (callback, delay) => {
 }
 export const swiftHash = (b) => {
   {
-    for (var a = 0, c = b.length; c--; ) (a += b.charCodeAt(c)), (a += a << 10), (a ^= a >> 6)
+    for (var a = 0, c = b.length; c--; ) {
+      a += b.charCodeAt(c)
+      a += a << 10
+      a ^= a >> 6
+    }
     a += a << 3
     a ^= a >> 11
     return (((a + (a << 15)) & 4294967295) >>> 0).toString(16)
@@ -126,12 +130,7 @@ export const objectEquals = (x, y) => {
 export const customScriptRun = (js) => {
   console.log("customScriptRun - running", js)
   try {
-    let scriptLead = js
-      .replace("<script>", " ")
-      .replace('<script type="text/javascript">', " ")
-      .replace("<script type='text/javascript'>", " ")
-      .replace("</script>", " ")
-      .trim()
+    let scriptLead = js.replace("<script>", " ").replace('<script type="text/javascript">', " ").replace("<script type='text/javascript'>", " ").replace("</script>", " ").trim()
     console.log("customScriptRun - parsed", scriptLead)
     let scriptFn = new Function(scriptLead)
     scriptFn()

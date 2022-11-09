@@ -1,8 +1,8 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
+import React from "react"
+import PropTypes from "prop-types"
+import styled, { css } from "styled-components"
 
-const SwiftGridCol = ({ className, id, inline, children, spacing, breakpoints, widths = ['auto'], flex, offsets, maxColumnCount = 12 }) => {
+const SwiftGridCol = ({ className, id, inline, children, spacing, breakpoints, widths = ["auto"], flex, offsets, maxColumnCount = 12 }) => {
   // Breakpoints
   const breakpointOne = breakpoints[0]
   const breakpointTwo = breakpoints.length >= 1 ? breakpoints[1] : null
@@ -32,7 +32,7 @@ const SwiftGridCol = ({ className, id, inline, children, spacing, breakpoints, w
       inline={inline}
       flex={flex}
       spacingX={spacing[0]}
-      spacingY={typeof spacing[1] === 'number' ? spacing[1] : spacing[0]}
+      spacingY={typeof spacing[1] === "number" ? spacing[1] : spacing[0]}
       //key={key}
       className={className}
     >
@@ -53,20 +53,20 @@ const Wrapper = styled.div`
     padding: ${props.spacingY}px ${props.spacingX}px;
 
     @media (min-width: ${props.breakpointOne}px) and (max-width: ${props.breakpointTwo || 9999}px) {
-      width: ${props.widthOne !== 'auto' ? `${(props.widthOne / 12) * 100}%` : null};
-      flex: ${props.widthOne !== 'auto' ? 'none !important' : null};
+      width: ${props.widthOne !== "auto" ? `${(props.widthOne / 12) * 100}%` : null};
+      flex: ${props.widthOne !== "auto" ? "none !important" : null};
       margin-left: ${props.offsetOne ? `${(props.offsetOne / 12) * 100}% !important` : null};
     }
 
     @media (min-width: ${props.breakpointTwo}px) and (max-width: ${props.breakpointThree || 9999}px) {
-      width: ${props.widthTwo !== 'auto' ? `${(props.widthTwo / 12) * 100}%` : null};
-      flex: ${props.widthTwo !== 'auto' ? 'none !important' : null};
+      width: ${props.widthTwo !== "auto" ? `${(props.widthTwo / 12) * 100}%` : null};
+      flex: ${props.widthTwo !== "auto" ? "none !important" : null};
       margin-left: ${props.offsetTwo ? `${(props.offsetTwo / 12) * 100}% !important` : null};
     }
 
     @media (min-width: ${props.breakpointThree}px) and (max-width: 99999px) {
-      width: ${props.widthThree !== 'auto' ? `${(props.widthThree / 12) * 100}%` : null};
-      flex: ${props.widthThree !== 'auto' ? 'none !important' : null};
+      width: ${props.widthThree !== "auto" ? `${(props.widthThree / 12) * 100}%` : null};
+      flex: ${props.widthThree !== "auto" ? "none !important" : null};
       margin-left: ${props.offsetThree ? `${(props.offsetThree / 12) * 100}% !important` : null};
     }
     `}

@@ -1,3 +1,3 @@
-import { SwiftForm } from "./swift-form"
+import SwiftForm from "./swift-form"
 
 export default SwiftForm

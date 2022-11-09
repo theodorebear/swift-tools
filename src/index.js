@@ -57,7 +57,7 @@ function App() {
 					</Column>
 				</Row>*/}
 
-				<SwiftTable
+				{/*<SwiftTable
 					columns={[{ title: "Other", name: "name", type: "bubbles" }]}
 					data={[
 						{
@@ -73,6 +73,36 @@ function App() {
 						},
 					]}
 					links={"/agent/agents/{id}"}
+				/>*/}
+
+				<SwiftForm
+					onSubmit={() => {}}
+					cols={8}
+					fields={[
+						{
+							key: "name",
+							type: "text",
+							label: "Name",
+							value: "",
+							values: [
+								{ name: "test", value: "test" },
+								{ name: "test2", value: "test2" },
+							],
+							cols: 6,
+						},
+						{
+							key: "mls_id_copy",
+							type: "text",
+							label: "Gated field...",
+							value: null,
+							gate: [{ field: "name", present: true }],
+						},
+						{
+							key: "submit",
+							type: "submit",
+							label: "Create",
+						},
+					]}
 				/>
 
 				{/*<SwiftForm

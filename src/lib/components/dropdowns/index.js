@@ -1,3 +1,3 @@
-import { SwiftDropdown } from "./swift-dropdown"
+import SwiftDropdown from "./swift-dropdown"
 
 export default SwiftDropdown

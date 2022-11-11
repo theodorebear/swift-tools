@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useImperativeHandle, forwardRef, useRef } from "react"
+import { createRef, useState, useEffect, useImperativeHandle, forwardRef, useRef } from "react"
 import { SwiftFormStyled, SwiftFormButtonListStyled } from "./swift-form-style"
 import { Formik, Field, useFormikContext } from "formik"
 import classNames from "classnames"
@@ -14,6 +14,7 @@ import SwiftInputTextChip from "../inputs/swift-input-text-chip"
 import SwiftInputOTP from "../inputs/swift-input-otp"
 // error in remix - Cannot read properties of undefined (reading 'root')
 // import SwiftInputCode from './swift-input-code/swift-input-code'
+import SwiftInputRichTextarea from "../inputs/swift-input-rich-textarea"
 import SwiftCreditCard from "../inputs/swift-credit-card"
 import SwiftButton from "../buttons/swift-button"
 import SwiftSelectModal from "../inputs/swift-input-select-modal"
@@ -24,6 +25,7 @@ import SwiftInputHidden from "../inputs/swift-input-hidden"
 import SwiftInputCheckbox from "../inputs/swift-input-checkbox"
 import SwiftInputCheckboxGroup from "../inputs/swift-input-checkbox-group"
 import SwiftInputRadio from "../inputs/swift-input-radio"
+import SwiftMultiToggle from "../inputs/swift-input-multitoggle"
 import SwiftMultiCheckbox from "../inputs/swift-input-multicheckbox"
 import SwiftInputTextarea from "../inputs/swift-input-textarea"
 import SwiftSelect from "../inputs/swift-select"
@@ -33,13 +35,14 @@ import SwiftTitle from "../inputs/swift-title"
 import SwiftSelectEnum from "../inputs/swift-select-enum"
 import SwiftLine from "../inputs/swift-line"
 import SwiftMultiButton from "../inputs/swift-multibutton"
+import SwiftInputMinMax from "../inputs/swift-input-minmax"
 import { GridItem, Box } from "../grid"
 import { SwiftGridRow, SwiftGridCol } from "../grid/index"
 
 import valid from "card-validator"
 
 const utilizeFocus = () => {
-  const ref = React.createRef()
+  const ref = createRef()
   const setFocus = () => {
     ref.current && ref.current.focus()
   }
@@ -64,11 +67,16 @@ const SwiftFormItem = (props) => {
     steps,
     handleChange,
     setBraintreeTokenize,
+    inputSize,
     theme,
     myRefs,
     submitRef,
   } = props
-
+  const customOnChange = (val) => {
+    if (item.onChange) {
+      item.onChange(val)
+    }
+  }
   const { submitForm } = useFormikContext()
 
   return (
@@ -83,13 +91,15 @@ const SwiftFormItem = (props) => {
         <>{item.jsx}</>
       ) : item.type === "checkbox" ? (
         <SwiftInputCheckbox
-          label={item.label}
+          {...item}
           name={item.key}
           onChange={(e) => {
             if (item.onChange) {
               item.onChange(!values[item.key])
             }
-            setFieldValue(item.key, values[item.key] == 1 ? 0 : 1)
+            if (!item.disabled) {
+              setFieldValue(item.key, values[item.key] == 1 ? 0 : 1)
+            }
           }}
           checked={values[item.key] == 1 ? true : false}
           disabled={item.disabled ?? undefined}
@@ -201,7 +211,7 @@ const SwiftFormItem = (props) => {
       ) : item.type === "multibutton" ? (
         <SwiftMultiButton
           {...item}
-          value={String(values[item.key])}
+          value={values[item.key] ? String(values[item.key]) : values[item.key]}
           values={item.values ? item.values.map((val) => ({ ...val, value: String(val.value) })) : []}
           onChange={(val) => {
             console.log("multibutton changing!", val)
@@ -224,6 +234,7 @@ const SwiftFormItem = (props) => {
           emptyLabel={item.emptyLabel ?? undefined}
           helperText={touched[item.key] && errors[item.key]}
           error={Boolean(touched[item.key] && errors[item.key])}
+          size={inputSize}
           onChange={(e) => {
             if (item.onChange) {
               item.onChange(e.currentTarget.value)
@@ -270,7 +281,7 @@ const SwiftFormItem = (props) => {
         <SwiftDrop
           {...item}
           accept={null}
-          status={values[item.key] ? "success" : "accept"}
+          status={values[item.key] && values[item.key].length > 0 ? "success" : "accept"}
           //onChange={(vals) => {
           //  if (item.onChange) {
           //    item.onChange(vals)
@@ -300,7 +311,7 @@ const SwiftFormItem = (props) => {
             color={item.color ?? undefined}
             icon={item.icon ?? undefined}
             fillType={item.fillType || undefined}
-            onClick={item.action && item.action == "back" && step > 1 ? () => setStep(step - 1) : item.onClick ?? undefined}
+            onClick={item.action && item.action == "back" && step > 1 ? () => setStep(step - 1) : item.action && item.action == "submit" ? () => submitForm() : item.onClick ?? undefined}
             size={inline ? "large" : undefined}
           >
             {item.label}
@@ -345,6 +356,7 @@ const SwiftFormItem = (props) => {
         />
       ) : item.type === "textarea" ? (
         <SwiftInputTextarea
+          {...item}
           fullWidth
           variant="filled"
           label={item.label}
@@ -387,6 +399,39 @@ const SwiftFormItem = (props) => {
               item.onChange(val)
             }
             setFieldValue(item.key, val)
+          }}
+        />
+      ) : item.type === "rich-textarea" ? (
+        <SwiftInputRichTextarea
+          fullWidth
+          variant="filled"
+          label={item.label}
+          name={item.key}
+          value={values[item.key] ?? ""}
+          disabled={item.disabled ?? undefined}
+          // onBlur={(e) => {
+          //   console.log("swift-form rich-textarea onBlur")
+          //   handleBlur(e)
+          //   if (item.onBlur) {
+          //     item.onBlur(e)
+          //   }
+          // }}
+          height={item.height ?? undefined}
+          autoCorrect={item.autoCorrect}
+          autoComplete={item.autoComplete}
+          autoFocus={item.autoFocus ?? undefined}
+          helperText={touched[item.key] && errors[item.key]}
+          error={Boolean(touched[item.key] && errors[item.key])}
+          onChange={(val) => {
+            //console.log("swift-form rich-textarea onChange", val)
+            // if (item.onChange) {
+            //   item.onChange(val)
+            // }
+            customOnChange(val)
+
+            setFieldValue(item.key, val)
+
+            //handleChange(val)
           }}
         />
       ) : /*) : item.type === 'date' ? (
@@ -440,7 +485,36 @@ const SwiftFormItem = (props) => {
         />*/
       item.type === "credit_card" ? (
         <SwiftCreditCard setBraintreeTokenize={setBraintreeTokenize} />
-      ) : item.type === "color" ? (
+      ) : // ) : item.type === "code" ? (
+      //   <SwiftInputCode
+      //     fullWidth
+      //     variant="filled"
+      //     label={item.label}
+      //     name={item.key}
+      //     value={values[item.key] ?? ""}
+      //     disabled={item.disabled ?? undefined}
+      //     onBlur={(e) => {
+      //       handleBlur(e)
+      //       if (item.onBlur) {
+      //         item.onBlur(e)
+      //       }
+      //     }}
+      //     format={item.format || false}
+      //     autoCorrect={item.autoCorrect}
+      //     autoComplete={item.autoComplete}
+      //     autoFocus={item.autoFocus ?? undefined}
+      //     helperText={touched[item.key] && errors[item.key]}
+      //     error={Boolean(touched[item.key] && errors[item.key])}
+      //     //onChange={handleChange}
+      //     onChange={(e) => {
+      //       //console.log("code field updateing", e)
+      //       if (item.onChange) {
+      //         item.onChange(e)
+      //       }
+      //       setFieldValue(item.key, e)
+      //     }}
+      //   />
+      item.type === "color" ? (
         <SwiftInputColor
           fullWidth
           variant="filled"
@@ -461,6 +535,9 @@ const SwiftFormItem = (props) => {
           error={Boolean(touched[item.key] && errors[item.key])}
           onChange={(val) => {
             //console.log("COLOR CHANGE", val)
+            if (item.onChange) {
+              item.onChange(val)
+            }
             setFieldValue(item.key, val)
           }}
         />
@@ -472,6 +549,11 @@ const SwiftFormItem = (props) => {
           name={item.key}
           value={values[item.key] ?? ""}
           disabled={item.disabled ?? undefined}
+          onUpdate={(e) => {
+            if (item.onUpdate) {
+              item.onUpdate(e)
+            }
+          }}
           onBlur={(e) => {
             handleBlur(e)
             if (item.onBlur) {
@@ -485,6 +567,9 @@ const SwiftFormItem = (props) => {
           helperText={touched[item.key] && errors[item.key]}
           error={Boolean(touched[item.key] && errors[item.key])}
           onChange={(e) => {
+            if (item.onChange) {
+              item.onChange(e)
+            }
             setFieldValue(item.key, e)
           }}
           mask={item.mask}
@@ -679,9 +764,12 @@ const SwiftFormSubmitRef = forwardRef((props, ref) => {
 })
 
 const SwiftForm = (props) => {
-  const { fields, steps, easyFiles, inline, submitRef } = props
+  const { fields, steps, easyFiles, inline, submitRef, inputSize } = props
 
   const [step, setStep] = useState(1)
+
+  const formRef = useRef(null)
+
   const [braintreeTokenize, setBraintreeTokenize] = useState(null)
 
   const initialValues = {}
@@ -707,8 +795,10 @@ const SwiftForm = (props) => {
         name: val.url.substring(val.url.lastIndexOf("/") + 1),
       }))
       // [{ name: item.value.substring(item.value.lastIndexOf('/') + 1), url: item.value }]
-    } else if (item.type == "multicheckbox") {
+    } else if (item.type == "multicheckbox" || item.type == "multitoggle") {
       initialValues[item.key] = item.value == null ? null : item.value ?? ""
+    } else if (item.type == "select" && item.emptyValue === false && !item.value && item.values.length > 0) {
+      initialValues[item.key] = item.values[0]["value"]
     } else {
       initialValues[item.key] = item.value ?? ""
     }
@@ -765,6 +855,41 @@ const SwiftForm = (props) => {
                   valsSubmit[field.key] = ""
                 }
               })
+
+            fields
+              .filter((field) => field.type == "collection")
+              .forEach((field) => {
+                console.log("collection field", JSON.stringify(valsSubmit[field.key]), valsSubmit[field.key] ? 1 : 0, valsSubmit[field.key].length > 0)
+                if (valsSubmit[field.key] && valsSubmit[field.key].length > 0) {
+                  console.log("RUNNING", valsSubmit[field.key])
+                  valsSubmit[field.key].forEach((fieldRow, i) => {
+                    console.log("collection fieldRow", fieldRow)
+                    Object.keys(fieldRow).forEach((fieldKey) => {
+                      const fieldCell = fieldRow[fieldKey]
+                      console.log("collection fieldCell", fieldCell, typeof fieldCell)
+                      if (typeof fieldCell != "object") return
+
+                      if (fieldCell[0].output_format && fieldCell[0].output_format == "json") {
+                        console.log("swift-form submit - collectionField output_form json detected, but not implemented.")
+                        // something like: valsSubmit[field.key]["value"][i] = JSON.stringify(fieldCell[0][0]["output_json"])
+                      } else {
+                        console.log("saving url easyfiles embedded = ", fieldCell)
+                        console.log("saving url easyfiles embedded valsSubmit = ", valsSubmit)
+                        console.log("saving url easyfiles embedded valsSubmit = ", valsSubmit[field.key])
+                        // console.log("saving to valsSubmit: " + JSON.stringify(valsSubmit[field.key]))
+                        // console.log("saving to valsSubmit: ", valsSubmit[field.key])
+                        valsSubmit[field.key][i][fieldKey] = fieldCell[0]["url"]
+                      }
+                    })
+                  })
+
+                  // } else {
+                  //   //valsSubmit[field.key] = ""
+                }
+              })
+
+            //console.log("easyFiles done - " + JSON.stringify(valsSubmit))
+            //console.log("easyFiles done - ", valsSubmit)
           }
 
           // do we have a credit_card in this form? get nonce.
@@ -866,18 +991,28 @@ const SwiftForm = (props) => {
             })
           }
         }}
-        validate={(values) => {
+        validate={(values, e) => {
+          //console.log("validating - values", values, e)
           const errors = {}
           fields.forEach(function (item) {
             //console.log("validating?", item)
-            // is field gated based on another field? skip.
-            if (
-              item.gate &&
-              ((Object.keys(item.gate).includes("value") && values[item.gate.field] != item.gate.value) ||
-                (Object.keys(item.gate).includes("contains") && !(values[item.gate.field] || "").includes(item.gate.contains)))
-            ) {
-              return
+
+            if (item.gate) {
+              var gateSuccess = true
+              //console.log("SWIFTFORM-GATE-VALIDATE", item.gate)
+              item.gate.forEach((gate) => {
+                if (
+                  (Object.keys(gate).includes("value") && values[gate.field] != gate.value) ||
+                  (Object.keys(gate).includes("present") && gate.present && !values[gate.field]) ||
+                  (Object.keys(gate).includes("contains") && !(values[gate.field] || "").includes(gate.contains))
+                ) {
+                  //console.log("gate FAILED", gate)
+                  gateSuccess = false
+                }
+              })
+              if (!gateSuccess) return
             }
+
             // is field part of a multi-step form? skip.
             if (steps > 1 && item.step && item.step != step) {
               return
@@ -894,7 +1029,7 @@ const SwiftForm = (props) => {
                 values[item.key] !== "root"
               ) {
                 errors[item.key] = "An email address is required."
-              } else if (item.validate === "phone" && !/^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(values[item.key])) {
+              } else if (item.validate === "phone" && !/^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im.test(values[item.key])) {
                 errors[item.key] = "Enter a valid phone number."
               } else if (item.validate === "zip_code" && !values[item.key].complete) {
                 errors[item.key] = "Enter a valid zip code."
@@ -945,7 +1080,16 @@ const SwiftForm = (props) => {
           return (
             <form onSubmit={handleSubmit} autoComplete="off" autoCorrect="off">
               <SwiftFormSubmitRef ref={submitRef} />
-              {status.text ? (
+              {errors && Object.keys(errors).length > 0 && Object.keys(errors).some((elem) => Object.keys(touched).includes(elem)) && fields.length > 4 ? (
+                <div className={classNames("status", "error")}>
+                  <span>
+                    Error with these fields:{" "}
+                    {Object.keys(errors)
+                      .filter((elem) => Object.keys(touched).includes(elem))
+                      .join(", ")}
+                  </span>
+                </div>
+              ) : status.text ? (
                 <div className={classNames("status", status.type)}>
                   <span>{status.text}</span>
                 </div>
@@ -964,13 +1108,20 @@ const SwiftForm = (props) => {
                     //let itemColSpan = ['line', 'subtitle', 'title', 'label'].includes(item.type) ? formCols : item.cols || formCols
                     //let itemRowSpan = item.gridRowSpan || props.gridRows
 
-                    // is field gated based on another field? skip.
-                    if (
-                      item.gate &&
-                      ((Object.keys(item.gate).includes("value") && values[item.gate.field] != item.gate.value) ||
-                        (Object.keys(item.gate).includes("contains") && !(values[item.gate.field] || "").includes(item.gate.contains)))
-                    ) {
-                      return null
+                    // Gate V2 (multi-gate) - is field gated based on another field? skip.
+                    if (item.gate) {
+                      var gateSuccess = true
+                      item.gate.forEach((gate) => {
+                        if (
+                          (Object.keys(gate).includes("value") && values[gate.field] != gate.value) ||
+                          (Object.keys(gate).includes("present") && gate.present && !values[gate.field]) ||
+                          (Object.keys(gate).includes("contains") && !(values[gate.field] || "").includes(gate.contains))
+                        ) {
+                          //console.log("gate FAILED", gate)
+                          gateSuccess = false
+                        }
+                      })
+                      if (!gateSuccess) return null
                     }
 
                     if (inline) {
@@ -1077,6 +1228,7 @@ const SwiftForm = (props) => {
                           handleChange={handleChange}
                           setBraintreeTokenize={setBraintreeTokenize}
                           fields={fields}
+                          inputSize={inputSize}
                           theme={props.theme ?? "default"}
                           myRefs={myRefs}
                           submitRef={submitRef}
@@ -1101,6 +1253,7 @@ SwiftForm.defaultProps = {
   inline: false,
   easyFiles: false,
   setContext: () => {},
+  inputSize: null,
   submitRef: null,
   theme: "default",
 }

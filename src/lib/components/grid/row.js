@@ -1,9 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled, { css } from 'styled-components'
-import SwiftGridCol from './column'
+import React from "react"
+import PropTypes from "prop-types"
+import styled, { css } from "styled-components"
+import SwiftGridCol from "./column"
 
-const SwiftGridRow = ({ children, className, id, breakpoints = [769], spacing = [12], flexDirections, maxColumnCount = 12 }) => {
+const SwiftGridRow = ({ children, className, id, breakpoints = [769], spacing = [12], flexDirections, maxColumnCount = 8 }) => {
   return (
     <Wrapper
       className={className}
@@ -11,7 +11,7 @@ const SwiftGridRow = ({ children, className, id, breakpoints = [769], spacing = 
       breakpoint={breakpoints[0]}
       breakpointTwo={breakpoints[1] || breakpoints[0]}
       spacingX={spacing[0]}
-      spacingY={typeof spacing[1] === 'number' ? spacing[1] : spacing[0]}
+      spacingY={typeof spacing[1] === "number" ? spacing[1] : spacing[0]}
       flexDirections={flexDirections || null}
       maxColumnCount={maxColumnCount}
     >
@@ -44,13 +44,13 @@ const Wrapper = styled.div`
       ${props.customStyles}
     `};
   margin: 0 -${(props) => props.spacingX}px 0 -${(props) => props.spacingX}px;
-  width: ${(props) => (props.standardWidth ? '100%' : `calc(100% + ${props.spacingX * 2}px)`)};
+  width: ${(props) => (props.standardWidth ? "100%" : `calc(100% + ${props.spacingX * 2}px)`)};
   @media (min-width: ${(props) => props.breakpoint}px) {
-    flex-direction: ${(props) => (props.flexDirections ? props.flexDirections[0] || 'row' : 'row')};
+    flex-direction: ${(props) => (props.flexDirections ? props.flexDirections[0] || "row" : "row")};
     display: flex;
     justify-content: flex-start;
     flex-wrap: wrap;
-    margin: ${(props) => (props.standardWidth ? '0' : `0 -${props.spacingX}px 0 -${props.spacingX}px`)};
+    margin: ${(props) => (props.standardWidth ? "0" : `0 -${props.spacingX}px 0 -${props.spacingX}px`)};
   }
 `
 

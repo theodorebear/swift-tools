@@ -22,7 +22,10 @@ const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactiv
   //console.log('cell content', { rowKey, data, index, cellValue, column, inactive_string, dropdown, setDropdown  });
 
   return (
-    <SwiftTableStyled.cellContent textAlign={column["textAlign"] || undefined} style={{ minWidth: column["minWidth"] || undefined, ...(config && config.style ? config.style : []) }}>
+    <SwiftTableStyled.cellContent
+      textAlign={column["textAlign"] || undefined}
+      style={{ minWidth: column["minWidth"] || undefined, ...(config && config.style ? config.style : []) }}
+    >
       {cellValue != null ? (
         column["type"] == "datetime" ? (
           <Moment format="YYYY-MM-DD HH:mm:ss">{cellValue}</Moment>
@@ -203,147 +206,188 @@ const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, 
   )
 }
 
-const SortableRow = SortableElement(({ value: data, links, multiSelect, handleSelect, columns, rowsSelectedAll, rowsSelected, sortable, dragSortable, inactive_string, dropdown, setDropdown }) => {
-  var link = null
-  if (links) {
-    link = links
-    Object.keys(data).forEach((key) => {
-      link = link.replace("{" + key + "}", data[key])
-    })
-  }
+const SortableRow = SortableElement(
+  ({
+    value: data,
+    links,
+    multiSelect,
+    handleSelect,
+    columns,
+    rowsSelectedAll,
+    rowsSelected,
+    sortable,
+    dragSortable,
+    inactive_string,
+    dropdown,
+    setDropdown,
+  }) => {
+    var link = null
+    if (links) {
+      link = links
+      Object.keys(data).forEach((key) => {
+        link = link.replace("{" + key + "}", data[key])
+      })
+    }
 
-  // todo what if no ID?
-  const key = "swiftTableBodyCell-" + data.id
+    // todo what if no ID?
+    const key = "swiftTableBodyCell-" + data.id
 
-  var rowHref = null
-  var rowHandleClick = null
-  if (data.config && data.config["handleClick"]) {
-    // onclick - row level via cell->config->handleClick
-    rowHandleClick = () => data.config["handleClick"](data)
-  } else if (data && data["handleClick"]) {
-    // onclick - row level via cell->handleClick
-    rowHandleClick = () => data["handleClick"](data)
-  } else if (link) {
-    // link - row level
-    rowHref = link // BUT its hard to put a <a> here, so will just calculate this to see if we highlight on hover, and do link in cell still.
-  }
+    var rowHref = null
+    var rowHandleClick = null
+    if (data.config && data.config["handleClick"]) {
+      // onclick - row level via cell->config->handleClick
+      rowHandleClick = () => data.config["handleClick"](data)
+    } else if (data && data["handleClick"]) {
+      // onclick - row level via cell->handleClick
+      rowHandleClick = () => data["handleClick"](data)
+    } else if (link) {
+      // link - row level
+      rowHref = link // BUT its hard to put a <a> here, so will just calculate this to see if we highlight on hover, and do link in cell still.
+    }
 
-  return (
-    <Fragment key={key}>
-      <SwiftTableStyled.row inactive={data.config && data.config.inactive ? 1 : 0} links={rowHandleClick || rowHref ? 1 : 0} onClick={rowHandleClick ?? (() => {})}>
-        {multiSelect && (
-          <SwiftTableStyled.cell checkbox>
-            <div>
-              <SwiftInputCheckbox
-                checked={rowsSelectedAll ? true : rowsSelected.includes(data.id) ? true : false}
-                onChange={(e) => handleSelect(data.id, e.currentTarget.checked, e.nativeEvent.shiftKey)}
-              />
-            </div>
-          </SwiftTableStyled.cell>
-        )}
-        {columns.map((column, index) => {
-          var cellValue = data[column["name"]]
-          //console.log('swift-table.tsx - column', column)
-          //console.log('swift-table.tsx - cellValue', cellValue)
-          if ((cellValue == null || cellValue == "") && column["name_fallback"] && data[column["name_fallback"]] != null) {
-            cellValue = data[column["name_fallback"]]
-          }
-
-          //console.log('swift-table.tsx - cellValue2', cellValue)
-          return (
-            <SwiftTableStyled.cell key={`${key}-field${index}`} data-type={column["type"]} full={column.full} nowrap={column.nowrap} sortable={sortable} dragSortable={dragSortable}>
-              <SwiftTableCell
-                link={link}
-                config={data.config}
-                rowKey={key}
-                cellValue={cellValue}
-                column={column}
-                data={data}
-                index={index}
-                inactive_string={inactive_string}
-                dropdown={dropdown}
-                setDropdown={setDropdown}
-              />
+    return (
+      <Fragment key={key}>
+        <SwiftTableStyled.row
+          inactive={data.config && data.config.inactive ? 1 : 0}
+          links={rowHandleClick || rowHref ? 1 : 0}
+          onClick={rowHandleClick ?? (() => {})}
+        >
+          {multiSelect && (
+            <SwiftTableStyled.cell checkbox>
+              <div>
+                <SwiftInputCheckbox
+                  checked={rowsSelectedAll ? true : rowsSelected.includes(data.id) ? true : false}
+                  onChange={(e) => handleSelect(data.id, e.currentTarget.checked, e.nativeEvent.shiftKey)}
+                />
+              </div>
             </SwiftTableStyled.cell>
-          )
-        })}
-        {dragSortable && (
-          <SwiftTableStyled.cell handle>
-            <SwiftTableHandle />
-          </SwiftTableStyled.cell>
-        )}
-      </SwiftTableStyled.row>
+          )}
+          {columns.map((column, index) => {
+            var cellValue = data[column["name"]]
+            //console.log('swift-table.tsx - column', column)
+            //console.log('swift-table.tsx - cellValue', cellValue)
+            if ((cellValue == null || cellValue == "") && column["name_fallback"] && data[column["name_fallback"]] != null) {
+              cellValue = data[column["name_fallback"]]
+            }
 
-      {data.children && data.children.length > 0 && Array.isArray(data.children) ? (
-        <>
-          {data.children.map((elemChild) => (
-            <SwiftTableStyled.row>
-              {columns.map((column, index) => {
-                var cellValue = elemChild[column["name"]]
-                if ((cellValue == null || cellValue == "") && column["name_fallback"] && elemChild[column["name_fallback"]] != null) {
-                  cellValue = elemChild[column["name_fallback"]]
-                }
-                if (index == 0) {
-                  cellValue = <>&#8627; {cellValue}</>
-                }
-                var linkChild = null
-                if (links) {
-                  linkChild = links
-                  Object.keys(data).forEach((key) => {
-                    linkChild = linkChild.replace("{" + key + "}", elemChild[key])
-                  })
-                }
-                return (
-                  <SwiftTableStyled.cell key={`cell_${column.name}`} data-type={column["type"]}>
-                    <SwiftTableCell
-                      link={linkChild}
-                      config={data.config}
-                      rowKey={key}
-                      cellValue={cellValue}
-                      column={column}
-                      data={elemChild}
-                      index={index}
-                      inactive_string={inactive_string}
-                      dropdown={dropdown}
-                      setDropdown={setDropdown}
-                    />
-                  </SwiftTableStyled.cell>
-                )
-              })}
-            </SwiftTableStyled.row>
-          ))}
-        </>
-      ) : null}
-    </Fragment>
-  )
-})
+            //console.log('swift-table.tsx - cellValue2', cellValue)
+            return (
+              <SwiftTableStyled.cell
+                key={`${key}-field${index}`}
+                data-type={column["type"]}
+                full={column.full}
+                nowrap={column.nowrap}
+                sortable={sortable}
+                dragSortable={dragSortable}
+              >
+                <SwiftTableCell
+                  link={link}
+                  config={data.config}
+                  rowKey={key}
+                  cellValue={cellValue}
+                  column={column}
+                  data={data}
+                  index={index}
+                  inactive_string={inactive_string}
+                  dropdown={dropdown}
+                  setDropdown={setDropdown}
+                />
+              </SwiftTableStyled.cell>
+            )
+          })}
+          {dragSortable && (
+            <SwiftTableStyled.cell handle>
+              <SwiftTableHandle />
+            </SwiftTableStyled.cell>
+          )}
+        </SwiftTableStyled.row>
 
-const SortableTable = SortableContainer(({ items, links, multiSelect, handleSelect, columns, rowsSelectedAll, rowsSelected, sortable, dragSortable, inactive_string, dropdown, setDropdown }) => {
-  //console.log('swift-table.tsx - items', items)
-  return (
-    <SwiftTableStyled.body>
-      {items.map((value, index) => (
-        <SortableRow
-          rowsSelectedAll={rowsSelectedAll}
-          rowsSelected={rowsSelected}
-          columns={columns}
-          multiSelect={multiSelect}
-          handleSelect={handleSelect}
-          links={links}
-          index={index}
-          value={value}
-          key={"swiftTableBodyCell-" + (value.id || index)}
-          disabled={!dragSortable ?? false}
-          sortable={sortable}
-          dragSortable={dragSortable}
-          inactive_string={inactive_string}
-          dropdown={dropdown}
-          setDropdown={setDropdown}
-        />
-      ))}
-    </SwiftTableStyled.body>
-  )
-})
+        {data.children && data.children.length > 0 && Array.isArray(data.children) ? (
+          <>
+            {data.children.map((elemChild) => (
+              <SwiftTableStyled.row>
+                {columns.map((column, index) => {
+                  var cellValue = elemChild[column["name"]]
+                  if ((cellValue == null || cellValue == "") && column["name_fallback"] && elemChild[column["name_fallback"]] != null) {
+                    cellValue = elemChild[column["name_fallback"]]
+                  }
+                  if (index == 0) {
+                    cellValue = <>&#8627; {cellValue}</>
+                  }
+                  var linkChild = null
+                  if (links) {
+                    linkChild = links
+                    Object.keys(data).forEach((key) => {
+                      linkChild = linkChild.replace("{" + key + "}", elemChild[key])
+                    })
+                  }
+                  return (
+                    <SwiftTableStyled.cell key={`cell_${column.name}`} data-type={column["type"]}>
+                      <SwiftTableCell
+                        link={linkChild}
+                        config={data.config}
+                        rowKey={key}
+                        cellValue={cellValue}
+                        column={column}
+                        data={elemChild}
+                        index={index}
+                        inactive_string={inactive_string}
+                        dropdown={dropdown}
+                        setDropdown={setDropdown}
+                      />
+                    </SwiftTableStyled.cell>
+                  )
+                })}
+              </SwiftTableStyled.row>
+            ))}
+          </>
+        ) : null}
+      </Fragment>
+    )
+  }
+)
+
+const SortableTable = SortableContainer(
+  ({
+    items,
+    links,
+    multiSelect,
+    handleSelect,
+    columns,
+    rowsSelectedAll,
+    rowsSelected,
+    sortable,
+    dragSortable,
+    inactive_string,
+    dropdown,
+    setDropdown,
+  }) => {
+    //console.log('swift-table.tsx - items', items)
+    return (
+      <SwiftTableStyled.body>
+        {items.map((value, index) => (
+          <SortableRow
+            rowsSelectedAll={rowsSelectedAll}
+            rowsSelected={rowsSelected}
+            columns={columns}
+            multiSelect={multiSelect}
+            handleSelect={handleSelect}
+            links={links}
+            index={index}
+            value={value}
+            key={"swiftTableBodyCell-" + (value.id || index)}
+            disabled={!dragSortable ?? false}
+            sortable={sortable}
+            dragSortable={dragSortable}
+            inactive_string={inactive_string}
+            dropdown={dropdown}
+            setDropdown={setDropdown}
+          />
+        ))}
+      </SwiftTableStyled.body>
+    )
+  }
+)
 
 const SwiftTable = (props) => {
   const {
@@ -453,7 +497,10 @@ const SwiftTable = (props) => {
                 <SwiftTableStyled.row>
                   {multiSelect && (
                     <SwiftTableStyled.headerCell checkbox>
-                      <SwiftInputCheckbox checked={rowsSelectedAll ? true : false} onChange={(e) => handleSelect(null, e.currentTarget.checked, e.nativeEvent.shiftKey)} />
+                      <SwiftInputCheckbox
+                        checked={rowsSelectedAll ? true : false}
+                        onChange={(e) => handleSelect(null, e.currentTarget.checked, e.nativeEvent.shiftKey)}
+                      />
                     </SwiftTableStyled.headerCell>
                   )}
                   {columns.map((column) => (
@@ -465,10 +512,22 @@ const SwiftTable = (props) => {
                       dragSortable={dragSortable}
                     >
                       {column["type"] != "options" ? (
-                        <div onClick={Object.keys(column).includes("sortable") && column["sortable"] && props.sortUpdate ? () => props.sortUpdate(column["name"]) : () => {}}>
+                        <div
+                          onClick={
+                            Object.keys(column).includes("sortable") && column["sortable"] && props.sortUpdate
+                              ? () => props.sortUpdate(column["name"])
+                              : () => {}
+                          }
+                        >
                           <span title={column["title"]} dangerouslySetInnerHTML={{ __html: column["icon"] || column["title"] }}></span>
                           {sortable && Object.keys(column).includes("sortable") && column["sortable"] && (
-                            <svg className="swift_table_header_cell_sort" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <svg
+                              className="swift_table_header_cell_sort"
+                              xmlns="http://www.w3.org/2000/svg"
+                              width="24"
+                              height="24"
+                              viewBox="0 0 24 24"
+                            >
                               <path d="M14 2h-7.229l7.014 7h-13.785v6h13.785l-7.014 7h7.229l10-10z" />
                             </svg>
                           )}

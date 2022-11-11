@@ -374,9 +374,7 @@ const SwiftFormItem = (props) => {
       ) : item.type === "collection" ? (
         <SwiftInputCollection
           {...item}
-          value={
-            values[item.key] ? (values[item.key].constructor.name == "Object" ? Object.entries(values[item.key]) : values[item.key]) : []
-          }
+          value={values[item.key] ? (values[item.key].constructor.name == "Object" ? Object.entries(values[item.key]) : values[item.key]) : []}
           schema={
             item.schema || [
               { type: "text", label: "Label" },
@@ -538,10 +536,7 @@ const SwiftFormItem = (props) => {
               item.onAddressUpdate(p)
             }
             fields.forEach((otherItem) => {
-              if (
-                otherItem.chain &&
-                (otherItem.chain.field == item.key || (otherItem.chain.fields && otherItem.chain.fields.includes(item.key)))
-              ) {
+              if (otherItem.chain && (otherItem.chain.field == item.key || (otherItem.chain.fields && otherItem.chain.fields.includes(item.key)))) {
                 if (otherItem.chain.type == "zip" && p.address_components.filter((elem) => elem.types.includes("postal_code")).length) {
                   setFieldValue(otherItem.key, p.address_components.filter((elem) => elem.types.includes("postal_code"))[0].short_name)
                 }
@@ -558,8 +553,7 @@ const SwiftFormItem = (props) => {
           myRefs={myRefs}
           maskLen={
             item.mask === "card_cvv"
-              ? fields.filter((fieldOther) => fieldOther.mask == "card_number").length > 0 &&
-                values[fields.filter((fieldOther) => fieldOther.mask == "card_number")[0].key]
+              ? fields.filter((fieldOther) => fieldOther.mask == "card_number").length > 0 && values[fields.filter((fieldOther) => fieldOther.mask == "card_number")[0].key]
                 ? values[fields.filter((fieldOther) => fieldOther.mask == "card_number")[0].key].cvv_len
                 : 3
               : undefined
@@ -587,10 +581,7 @@ const SwiftFormItem = (props) => {
                     if (fields[fieldsIndexNext].type == "submit" && submitRef && submitRef.current) {
                       // last form element is complete, next form element is submit button, do we autosubmit here? maybe make it an option.
                       // submitRef.current.submit()
-                    } else if (
-                      typeof myRefs.current[fieldsIndexNext] !== "undefined" &&
-                      typeof myRefs.current[fieldsIndexNext].focus !== "undefined"
-                    ) {
+                    } else if (typeof myRefs.current[fieldsIndexNext] !== "undefined" && typeof myRefs.current[fieldsIndexNext].focus !== "undefined") {
                       myRefs.current[fieldsIndexNext].focus()
                     }
                   }, 75)
@@ -603,10 +594,7 @@ const SwiftFormItem = (props) => {
               var valNew = val
 
               fields.forEach((otherItem) => {
-                if (
-                  otherItem.chain &&
-                  (otherItem.chain.field == item.key || (otherItem.chain.fields && otherItem.chain.fields.includes(item.key)))
-                ) {
+                if (otherItem.chain && (otherItem.chain.field == item.key || (otherItem.chain.fields && otherItem.chain.fields.includes(item.key)))) {
                   //console.log(valNew)
                   if (!valNew || !valNew.length) {
                     setFieldValue(otherItem.key, "")
@@ -902,16 +890,11 @@ const SwiftForm = (props) => {
                 errors[item.key] = "This field is required!"
               } else if (
                 item.validate === "email" &&
-                !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(
-                  values[item.key]
-                ) &&
+                !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(values[item.key]) &&
                 values[item.key] !== "root"
               ) {
                 errors[item.key] = "An email address is required."
-              } else if (
-                item.validate === "phone" &&
-                !/^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(values[item.key])
-              ) {
+              } else if (item.validate === "phone" && !/^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(values[item.key])) {
                 errors[item.key] = "Enter a valid phone number."
               } else if (item.validate === "zip_code" && !values[item.key].complete) {
                 errors[item.key] = "Enter a valid zip code."
@@ -954,20 +937,7 @@ const SwiftForm = (props) => {
           return errors
         }}
       >
-        {({
-          values,
-          status,
-          errors,
-          touched,
-          handleBlur,
-          handleChange,
-          handleSubmit,
-          isSubmitting,
-          setFieldValue,
-          setValues,
-          setFieldTouched,
-          theme,
-        }) => {
+        {({ values, status, errors, touched, handleBlur, handleChange, handleSubmit, isSubmitting, setFieldValue, setValues, setFieldTouched, theme }) => {
           let formRows = props.gridRows || 1
           let formCols = inline ? fields.length : props.cols || 4
           let formGap = props.theme == "minimal" ? 0 : props.gridGap ?? 3
@@ -1013,12 +983,7 @@ const SwiftForm = (props) => {
                       //console.log(values['card_number'].includes('_'))
                       //console.log("----2")
                       //console.log("card number test",values['card_number'],(!values['card_number'] || !values['card_number']['complete']))
-                      if (
-                        props.type == "card" &&
-                        props.theme == "minimal" &&
-                        item.type == "text" &&
-                        (!values["card_number"] || !values["card_number"]["complete"])
-                      ) {
+                      if (props.type == "card" && props.theme == "minimal" && item.type == "text" && (!values["card_number"] || !values["card_number"]["complete"])) {
                         if (item.mask != "card_number") {
                           inlineItemWidth = 0
                           inlineItemFlex = null

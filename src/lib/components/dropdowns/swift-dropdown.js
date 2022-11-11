@@ -4,13 +4,14 @@ import classnames from 'classnames'
 import SwiftIcon from '../icons/swift-icon'
 
 const SwiftDropdown = (props) => {
-  const { show, trigger, onTrigger, title, items } = props
+  const { show, trigger, onTrigger, title, items, activeColor } = props
 
   useEffect(() => {}, [])
 
   return (
     <SwiftDropdownStyled
       show={show}
+      activeColor={activeColor}
       onClick={(e) => {
         e.stopPropagation()
         e.preventDefault()
@@ -75,6 +76,10 @@ const SwiftDropdown = (props) => {
       </div>
     </SwiftDropdownStyled>
   )
+}
+
+SwiftDropdown.defaultProps = {
+  activeColor: '#1b6191',
 }
 
 export default SwiftDropdown

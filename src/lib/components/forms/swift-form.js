@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useImperativeHandle, forwardRef, useRef } from 'react'
-import { SwiftFormStyled } from './swift-form-style'
+import { SwiftFormStyled, SwiftFormButtonListStyled } from './swift-form-style'
 import { Formik, Field, useFormikContext } from 'formik'
 import classNames from 'classnames'
 import SwiftDrop from '../inputs/swift-drop'
@@ -301,6 +301,7 @@ const SwiftFormItem = (props) => {
             icon={item.icon ?? undefined}
             fillType={item.fillType || undefined}
             onClick={item.action && item.action == 'back' && step > 1 ? () => setStep(step - 1) : item.onClick ?? undefined}
+            size={inline ? 'large' : undefined}
           >
             {item.label}
             {/*{item.type === "submit" && isSubmitting == "success" ? "Saved!" : item.label}*/}
@@ -512,7 +513,7 @@ const SwiftFormItem = (props) => {
           helperText={touched[item.key] && errors[item.key]}
           error={Boolean(touched[item.key] && errors[item.key])}
           onChange={(e) => {
-            console.log('OTP CHANGE', e)
+            //console.log('OTP CHANGE', e)
             setFieldValue(item.key, e)
             if (e.length == 6 && item.autoSubmit) {
               //console.log('OTP SUBMITTING', e)
@@ -980,110 +981,145 @@ const SwiftForm = (props) => {
                 </div>
               ) : null}
               <SwiftGridRow spacing={[6, 4]} breakpoints={[576]}>
-                {fields.map(function (item, index) {
-                  if (item.type === 'hidden') return null
-                  //<SwiftInputHidden type="hidden" key={item.key || index} name={item.key} value={item.value ?? ''} />
+                {fields
+                  .filter((item) => !(steps > 1 && item.step && item.step != step)) // filter out all inputs on a step
+                  .filter((item) => inline || !['button', 'submit'].includes(item.type)) // filter out all button / submit inputs (we put them at end)
+                  .map(function (item, index) {
+                    if (item.type === 'hidden') return null
+                    //<SwiftInputHidden type="hidden" key={item.key || index} name={item.key} value={item.value ?? ''} />
 
-                  if (item.type === 'multibutton' && item.values && item.values.length == 1) return null
-                  //<SwiftInputHidden type="hidden" key={item.key || index} name={item.key} value={item.value ?? ''} />
+                    if (item.type === 'multibutton' && item.values && item.values.length == 1) return null
+                    //<SwiftInputHidden type="hidden" key={item.key || index} name={item.key} value={item.value ?? ''} />
 
-                  let itemColSpan = ['line', 'subtitle', 'title', 'label'].includes(item.type) ? formCols : item.cols || formCols
+                    //let itemColSpan = ['line', 'subtitle', 'title', 'label'].includes(item.type) ? formCols : item.cols || formCols
+                    //let itemRowSpan = item.gridRowSpan || props.gridRows
 
-                  let itemRowSpan = item.gridRowSpan || props.gridRows
-
-                  // is field gated based on another field? skip.
-                  if (
-                    item.gate &&
-                    ((Object.keys(item.gate).includes('value') && values[item.gate.field] != item.gate.value) ||
-                      (Object.keys(item.gate).includes('contains') && !(values[item.gate.field] || '').includes(item.gate.contains)))
-                  ) {
-                    return null
-                  }
-
-                  // is field part of a multi-step form? skip.
-                  if (steps > 1 && item.step && item.step != step) {
-                    return null
-                  }
-
-                  if (inline) {
-                    var inlineItemFlex = item.flex && item.width != 'full' ? item.flex : undefined
-                    var inlineItemWidth = item.width == 'full' ? '100%' : item.width ?? undefined
-
-                    //console.log("----1")
-                    //console.log(values['card_number'])
-                    //console.log(!values['card_number'].length)
-                    //console.log(values['card_number'].includes('_'))
-                    //console.log("----2")
-                    //console.log("card number test",values['card_number'],(!values['card_number'] || !values['card_number']['complete']))
+                    // is field gated based on another field? skip.
                     if (
-                      props.type == 'card' &&
-                      props.theme == 'minimal' &&
-                      item.type == 'text' &&
-                      (!values['card_number'] || !values['card_number']['complete'])
+                      item.gate &&
+                      ((Object.keys(item.gate).includes('value') && values[item.gate.field] != item.gate.value) ||
+                        (Object.keys(item.gate).includes('contains') && !(values[item.gate.field] || '').includes(item.gate.contains)))
                     ) {
-                      if (item.mask != 'card_number') {
-                        inlineItemWidth = 0
-                        inlineItemFlex = null
-                      } else {
-                        inlineItemWidth = null
-                        inlineItemFlex = 1
-                      }
+                      return null
                     }
 
-                    return (
-                      <SwiftGridCol flex={1} key={item.key || index}>
-                        <SwiftFormItem
-                          item={item}
-                          index={index}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          setValues={setValues}
-                          isSubmitting={isSubmitting}
-                          inline={inline}
-                          handleBlur={handleBlur}
-                          step={step}
-                          setStep={setStep}
-                          steps={steps}
-                          handleChange={handleChange}
-                          setBraintreeTokenize={setBraintreeTokenize}
-                          fields={fields}
-                          theme={props.theme ?? 'default'}
-                          myRefs={myRefs}
-                          submitRef={submitRef}
-                        />
-                      </SwiftGridCol>
-                    )
-                  } else {
-                    return (
-                      <SwiftGridCol widths={[item.cols ? item.cols : 12]} key={index}>
-                        <SwiftFormItem
-                          item={item}
-                          index={index}
-                          values={values}
-                          touched={touched}
-                          errors={errors}
-                          setFieldValue={setFieldValue}
-                          setValues={setValues}
-                          isSubmitting={isSubmitting}
-                          inline={inline}
-                          handleBlur={handleBlur}
-                          step={step}
-                          setStep={setStep}
-                          steps={steps}
-                          handleChange={handleChange}
-                          setBraintreeTokenize={setBraintreeTokenize}
-                          fields={fields}
-                          theme={props.theme ?? 'default'}
-                          myRefs={myRefs}
-                          submitRef={submitRef}
-                        />
-                      </SwiftGridCol>
-                    )
-                  }
-                })}
+                    if (inline) {
+                      var inlineItemFlex = item.flex || undefined
+                      var inlineItemWidth = item.width == 'full' ? '100%' : item.width ?? undefined
+
+                      //console.log("----1")
+                      //console.log(values['card_number'])
+                      //console.log(!values['card_number'].length)
+                      //console.log(values['card_number'].includes('_'))
+                      //console.log("----2")
+                      //console.log("card number test",values['card_number'],(!values['card_number'] || !values['card_number']['complete']))
+                      if (
+                        props.type == 'card' &&
+                        props.theme == 'minimal' &&
+                        item.type == 'text' &&
+                        (!values['card_number'] || !values['card_number']['complete'])
+                      ) {
+                        if (item.mask != 'card_number') {
+                          inlineItemWidth = 0
+                          inlineItemFlex = null
+                        } else {
+                          inlineItemWidth = null
+                          inlineItemFlex = 1
+                        }
+                      }
+
+                      //flex={inlineItemFlex}
+
+                      return (
+                        <SwiftGridCol flex={1} key={item.key || index}>
+                          <SwiftFormItem
+                            item={item}
+                            index={index}
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                            setValues={setValues}
+                            isSubmitting={isSubmitting}
+                            inline={inline}
+                            handleBlur={handleBlur}
+                            step={step}
+                            setStep={setStep}
+                            steps={steps}
+                            handleChange={handleChange}
+                            setBraintreeTokenize={setBraintreeTokenize}
+                            fields={fields}
+                            theme={props.theme ?? 'default'}
+                            myRefs={myRefs}
+                            submitRef={submitRef}
+                          />
+                        </SwiftGridCol>
+                      )
+                    } else {
+                      return (
+                        <SwiftGridCol widths={[item.cols ? item.cols : 12]} key={index}>
+                          <SwiftFormItem
+                            item={item}
+                            index={index}
+                            values={values}
+                            touched={touched}
+                            errors={errors}
+                            setFieldValue={setFieldValue}
+                            setValues={setValues}
+                            isSubmitting={isSubmitting}
+                            inline={inline}
+                            handleBlur={handleBlur}
+                            step={step}
+                            setStep={setStep}
+                            steps={steps}
+                            handleChange={handleChange}
+                            setBraintreeTokenize={setBraintreeTokenize}
+                            fields={fields}
+                            theme={props.theme ?? 'default'}
+                            myRefs={myRefs}
+                            submitRef={submitRef}
+                          />
+                        </SwiftGridCol>
+                      )
+                    }
+                  })}
               </SwiftGridRow>
+
+              {fields
+                .filter((item) => !(steps > 1 && item.step && item.step != step)) // filter out all inputs on a step
+                .filter((item) => !inline && ['button', 'submit'].includes(item.type)).length > 0 && (
+                <SwiftFormButtonListStyled>
+                  {fields
+                    .filter((item) => !(steps > 1 && item.step && item.step != step)) // filter out all inputs on a step
+                    .filter((item) => ['button', 'submit'].includes(item.type)) // isolate all buttons we're gonna put them here at the end
+                    .map(function (item, index) {
+                      return (
+                        <SwiftFormItem
+                          key={index}
+                          item={item}
+                          index={index}
+                          values={values}
+                          touched={touched}
+                          errors={errors}
+                          setFieldValue={setFieldValue}
+                          setValues={setValues}
+                          isSubmitting={isSubmitting}
+                          inline={inline}
+                          handleBlur={handleBlur}
+                          step={step}
+                          setStep={setStep}
+                          steps={steps}
+                          handleChange={handleChange}
+                          setBraintreeTokenize={setBraintreeTokenize}
+                          fields={fields}
+                          theme={props.theme ?? 'default'}
+                          myRefs={myRefs}
+                          submitRef={submitRef}
+                        />
+                      )
+                    })}
+                </SwiftFormButtonListStyled>
+              )}
             </form>
           )
         }}

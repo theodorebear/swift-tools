@@ -1,4 +1,4 @@
-import { useState, Fragment } from 'react'
+import { useState, Fragment, useContext } from 'react'
 import SwiftTableStyled from './swift-table-style'
 //import _ from "lodash"
 import Moment from 'react-moment'
@@ -14,6 +14,7 @@ import { calendarFormats } from '../../helpers/calendar'
 import Modal from 'react-bootstrap/Modal'
 import SwiftForm from '../forms/swift-form'
 import SwiftDropdown from '../dropdowns/swift-dropdown'
+import { SwiftLinkContext } from '../providers'
 
 const SwiftTableHandle = SortableHandle(() => <span>::</span>)
 
@@ -27,8 +28,12 @@ const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactiv
     >
       {cellValue != null ? (
         column['type'] == 'datetime' ? (
-          <Moment calendar={calendarFormats['datetime']}>{cellValue}</Moment>
+          <Moment format="YYYY-MM-DD HH:mm:ss">{cellValue}</Moment>
         ) : column['type'] == 'date' ? (
+          <Moment format="YYYY-MM-DD">{cellValue}</Moment>
+        ) : column['type'] == 'datetime_recent' ? (
+          <Moment calendar={calendarFormats['datetime']}>{cellValue}</Moment>
+        ) : column['type'] == 'date_recent' ? (
           <Moment calendar={calendarFormats['date']}>{cellValue}</Moment>
         ) : column['type'] == 'boolean' ? (
           <>
@@ -112,14 +117,64 @@ const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactiv
 }
 
 const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, inactive_string, dropdown, setDropdown }) => {
+  const CustomLink = useContext(SwiftLinkContext)
+
+  /*{CustomLink ? (
+                <CustomLink href={link.path} to={link.path}>
+                  <span>{link.text}</span>
+                  <SwiftIcon i="next" />
+                </CustomLink>
+              ) : (*/
+
+  var cellHref = null
+  var cellHandleClick = null
+  if (config && config.fields && config.fields[column['name']] && config.fields[column['name']]['link']) {
+    // link - cell level via config->field->link
+    cellHref = config.fields[column['name']]['link']
+  } else if (config && config.fields && config.fields[column['name']] && config.fields[column['name']]['handleClick']) {
+    // onclick - cell level via config->field->handleClick
+    cellHandleClick = () => config.fields[column['name']]['handleClick'](data)
+  } else if (link) {
+    // link - row level but easier to only use row level to trigger hover state but apply actual link here in each cell level
+    cellHref = link
+  }
+
   return (
     <>
-      {config && config.fields && config.fields[column['name']] && config.fields[column['name']]['link'] ? (
-        <a
-          href={config.fields[column['name']]['link']}
-          className="swift-table-cell-link"
-          target={config.fields[column['name']]['link'].includes('http') ? '_blank' : ''}
-        >
+      {cellHref ? (
+        <>
+          {CustomLink ? (
+            <CustomLink href={cellHref} to={cellHref} className="swift-table-cell-link" target={cellHref.includes('http') ? '_blank' : ''}>
+              <SwiftTableCellContent
+                rowKey={rowKey}
+                cellValue={cellValue}
+                column={column}
+                data={data}
+                index={index}
+                inactive_string={inactive_string}
+                dropdown={dropdown}
+                setDropdown={setDropdown}
+                config={config && config.fields && config.fields[column['name']]}
+              />
+            </CustomLink>
+          ) : (
+            <a href={cellHref} className="swift-table-cell-link" target={cellHref.includes('http') ? '_blank' : ''}>
+              <SwiftTableCellContent
+                rowKey={rowKey}
+                cellValue={cellValue}
+                column={column}
+                data={data}
+                index={index}
+                inactive_string={inactive_string}
+                dropdown={dropdown}
+                setDropdown={setDropdown}
+                config={config && config.fields && config.fields[column['name']]}
+              />
+            </a>
+          )}
+        </>
+      ) : cellHandleClick ? (
+        <div className="swift-table-cell-link" onClick={cellHandleClick}>
           <SwiftTableCellContent
             rowKey={rowKey}
             cellValue={cellValue}
@@ -131,63 +186,7 @@ const SwiftTableCell = ({ config, link, rowKey, data, index, cellValue, column, 
             setDropdown={setDropdown}
             config={config && config.fields && config.fields[column['name']]}
           />
-        </a>
-      ) : config && config['onClick'] ? (
-        <a className="swift-table-cell-link" onClick={() => config['onClick'](data)}>
-          <SwiftTableCellContent
-            rowKey={rowKey}
-            cellValue={cellValue}
-            column={column}
-            data={data}
-            index={index}
-            inactive_string={inactive_string}
-            dropdown={dropdown}
-            setDropdown={setDropdown}
-            config={config && config.fields && config.fields[column['name']]}
-          />
-        </a>
-      ) : config && config.fields && config.fields[column['name']] && config.fields[column['name']]['onClick'] ? (
-        <a className="swift-table-cell-link" onClick={config.fields[column['name']]['onClick']}>
-          <SwiftTableCellContent
-            rowKey={rowKey}
-            cellValue={cellValue}
-            column={column}
-            data={data}
-            index={index}
-            inactive_string={inactive_string}
-            dropdown={dropdown}
-            setDropdown={setDropdown}
-            config={config && config.fields && config.fields[column['name']]}
-          />
-        </a>
-      ) : data && data['handleClick'] ? (
-        <a className="swift-table-cell-link" onClick={data['handleClick']}>
-          <SwiftTableCellContent
-            rowKey={rowKey}
-            cellValue={cellValue}
-            column={column}
-            data={data}
-            index={index}
-            inactive_string={inactive_string}
-            dropdown={dropdown}
-            setDropdown={setDropdown}
-            config={config && config.fields && config.fields[column['name']]}
-          />
-        </a>
-      ) : link ? (
-        <a href={link} target={link.includes('http') ? '_blank' : ''}>
-          <SwiftTableCellContent
-            rowKey={rowKey}
-            cellValue={cellValue}
-            column={column}
-            data={data}
-            index={index}
-            inactive_string={inactive_string}
-            dropdown={dropdown}
-            setDropdown={setDropdown}
-            config={config && config.fields && config.fields[column['name']]}
-          />
-        </a>
+        </div>
       ) : (
         <div className="">
           <SwiftTableCellContent
@@ -233,9 +232,26 @@ const SortableRow = SortableElement(
     // todo what if no ID?
     const key = 'swiftTableBodyCell-' + data.id
 
+    var rowHref = null
+    var rowHandleClick = null
+    if (data.config && data.config['handleClick']) {
+      // onclick - row level via cell->config->handleClick
+      rowHandleClick = () => data.config['handleClick'](data)
+    } else if (data && data['handleClick']) {
+      // onclick - row level via cell->handleClick
+      rowHandleClick = () => data['handleClick'](data)
+    } else if (link) {
+      // link - row level
+      rowHref = link // BUT its hard to put a <a> here, so will just calculate this to see if we highlight on hover, and do link in cell still.
+    }
+
     return (
       <Fragment key={key}>
-        <SwiftTableStyled.row inactive={data.config && data.config.inactive ? 1 : 0}>
+        <SwiftTableStyled.row
+          inactive={data.config && data.config.inactive ? 1 : 0}
+          links={rowHandleClick || rowHref ? 1 : 0}
+          onClick={rowHandleClick ?? (() => {})}
+        >
           {multiSelect && (
             <SwiftTableStyled.cell checkbox>
               <div>

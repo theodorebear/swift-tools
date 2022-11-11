@@ -21,15 +21,6 @@ SwiftTableStyled['table'] = styled.table`
   width: 100%;
   margin: 0;
   padding: 0;
-  ${(props) =>
-    props.links &&
-    `
-    tr:hover {
-      td {
-        background: ${(props) => darken(0.02, '#fff')};
-       }
-    }
-  `}
 `
 
 SwiftTableStyled['cell'] = styled.td`
@@ -64,7 +55,7 @@ SwiftTableStyled['cell'] = styled.td`
     }
   }
 
-  > a.swift-table-cell-link {
+  > .swift-table-cell-link {
     cursor: pointer;
     &:hover {
       text-decoration: underline !important;
@@ -307,18 +298,17 @@ SwiftTableStyled['row'] = styled.tr`
     links &&
     `
       cursor:pointer;
-      &:hover {
-          background: ${(props) => darken(0.05, '#fff')};
+      &:hover td {
+          background: ${darken(0.02, '#fff')};
+          color: #1b6191;
       }
-    }
-  }`}
+   `}
 
   ${({ inactive }) =>
     inactive &&
     `
       opacity:0.5;
-    }
-  }`}
+  `}
 `
 
 SwiftTableStyled['loading'] = styled.section`

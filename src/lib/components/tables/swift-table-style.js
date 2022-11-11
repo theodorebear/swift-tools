@@ -1,12 +1,12 @@
-import styled from 'styled-components'
-import { lighten, darken, transparentize, readableColor } from 'polished'
+import styled from "styled-components"
+import { lighten, darken, transparentize, readableColor } from "polished"
 
 /*
  *    "SwiftTable" Styled Component
  */
 const SwiftTableStyled = {}
 
-SwiftTableStyled['root'] = styled.div`
+SwiftTableStyled["root"] = styled.div`
   display: block;
   width: 100%;
   max-width: 100%;
@@ -17,13 +17,13 @@ SwiftTableStyled['root'] = styled.div`
    padding-bottom:242px;
   `}
 `
-SwiftTableStyled['table'] = styled.table`
+SwiftTableStyled["table"] = styled.table`
   width: 100%;
   margin: 0;
   padding: 0;
 `
 
-SwiftTableStyled['cell'] = styled.td`
+SwiftTableStyled["cell"] = styled.td`
   display: table-cell;
   font-size: 12px;
   vertical-align: middle;
@@ -62,7 +62,7 @@ SwiftTableStyled['cell'] = styled.td`
     }
   }
 
-  border-bottom: 1px solid ${(props) => darken(0.05, '#fff')};
+  border-bottom: 1px solid ${(props) => darken(0.05, "#fff")};
 
   max-width: 40vw;
   .swift-table-body-cell-link {
@@ -95,21 +95,21 @@ SwiftTableStyled['cell'] = styled.td`
     white-space: nowrap;
   }
 
-  &[data-type='media'] {
+  &[data-type="media"] {
     width: 172px;
   }
-  &[data-type='boolean'],
-  &[data-type='options'] {
+  &[data-type="boolean"],
+  &[data-type="options"] {
     width: 52px;
     white-space: nowrap;
   }
 
-  &[data-type='bubbles'] > a {
+  &[data-type="bubbles"] > a {
     padding-top: 2px;
     padding-bottom: 2px;
   }
 
-  &[data-type='number'] {
+  &[data-type="number"] {
     white-space: nowrap;
   }
 
@@ -124,7 +124,7 @@ SwiftTableStyled['cell'] = styled.td`
     background-position: center;
     flex: 1;
     &:after {
-      content: '';
+      content: "";
       display: block;
       padding-top: 100%;
     }
@@ -185,11 +185,11 @@ SwiftTableStyled['cell'] = styled.td`
   `}
 `
 
-SwiftTableStyled['cellContent'] = styled.div`
+SwiftTableStyled["cellContent"] = styled.div`
   display: flex;
   align-items: center;
   ${({ textAlign }) =>
-    textAlign == 'right' &&
+    textAlign == "right" &&
     `
   justify-content: flex-end;
   `}
@@ -203,14 +203,14 @@ SwiftTableStyled['cellContent'] = styled.div`
   }
 `
 
-SwiftTableStyled['headerCell'] = styled.td`
+SwiftTableStyled["headerCell"] = styled.td`
   cursor: pointer;
   display: table-cell;
 
   vertical-align: middle;
   padding: 10px;
   font-size: 12px;
-  border-bottom: 2px solid ${(props) => darken(0.1, '#fff')};
+  border-bottom: 2px solid ${(props) => darken(0.1, "#fff")};
 
   > div {
     display: flex;
@@ -290,16 +290,16 @@ SwiftTableStyled['headerCell'] = styled.td`
   }`}
 `
 
-SwiftTableStyled['header'] = styled.thead``
-SwiftTableStyled['body'] = styled.tbody``
+SwiftTableStyled["header"] = styled.thead``
+SwiftTableStyled["body"] = styled.tbody``
 
-SwiftTableStyled['row'] = styled.tr`
+SwiftTableStyled["row"] = styled.tr`
   ${({ links }) =>
     links &&
     `
       cursor:pointer;
       &:hover td {
-          background: ${darken(0.02, '#fff')};
+          background: ${darken(0.02, "#fff")};
           color: #1b6191;
       }
    `}
@@ -311,7 +311,7 @@ SwiftTableStyled['row'] = styled.tr`
   `}
 `
 
-SwiftTableStyled['loading'] = styled.section`
+SwiftTableStyled["loading"] = styled.section`
   width: 100%;
   min-height: 180px;
   display: flex;

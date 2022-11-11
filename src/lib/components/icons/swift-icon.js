@@ -1,4 +1,4 @@
-import styled from 'styled-components'
+import styled from "styled-components"
 
 const icons = {
   check: (
@@ -83,7 +83,7 @@ const icons = {
     </svg>
   ),
   stamp: (
-    <svg viewBox="0 0 880.899 880.899" style={{ enableBackground: 'new 0 0 880.899 880.899' }}>
+    <svg viewBox="0 0 880.899 880.899" style={{ enableBackground: "new 0 0 880.899 880.899" }}>
       <g>
         <path
           d="M530.25,537.2c9.9-48.7,25.2-124.301,25.3-124.4c28.9-33.9,46.7-173.9,46.7-225.3C602.25,83.9,529.85,0,440.45,0
@@ -414,7 +414,7 @@ const icons = {
     </svg>
   ),
   back: (
-    <svg role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{ transform: 'rotate(-180deg)' }}>
+    <svg role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{ transform: "rotate(-180deg)" }}>
       <path d="M13.025 1l-2.847 2.828 6.176 6.176h-16.354v3.992h16.354l-6.176 6.176 2.847 2.828 10.975-11z" />
     </svg>
   ),
@@ -489,7 +489,7 @@ const icons = {
     </svg>
   ),
   chevron_right: (
-    <svg role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{ transform: 'rotate(-90deg)' }}>
+    <svg role="img" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style={{ transform: "rotate(-90deg)" }}>
       <path d="M0 7.33l2.829-2.83 9.175 9.339 9.167-9.339 2.829 2.83-11.996 12.17z" />
     </svg>
   ),
@@ -537,11 +537,7 @@ const icons = {
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 750 471" preserveAspectRatio="xMidYMid meet">
       <g id="Page-1">
         <g id="amex">
-          <path
-            d="M711 40v391H41V40h670m0-40H41A40 40 0 001 40v391a40 40 0 0040 40h670a40 40 0 0040-40V40a40 40 0 00-40-40z"
-            transform="translate(-1)"
-            id="Rectangle-1"
-          />
+          <path d="M711 40v391H41V40h670m0-40H41A40 40 0 001 40v391a40 40 0 0040 40h670a40 40 0 0040-40V40a40 40 0 00-40-40z" transform="translate(-1)" id="Rectangle-1" />
         </g>
       </g>
       <path d="M11 113h728v101H11zm34 241h93v33H45zm127 0h156v33H172z" />
@@ -620,10 +616,7 @@ const icons = {
           d="M484 242h35c12 3 15 20 4 26-7 4-16 2-23 2h-16v-28zm42-32c2 9-7 17-15 16h-27v-26h32c5 1 9 5 10 10zm64-136v272c0 27-24 50-51 51h-81V287h88c14-1 29-10 29-25 2-15-12-25-26-27-5 0-5-2 0-2 13-3 23-16 19-30-3-14-18-19-31-19h-79v-62c2-26 27-48 53-48h79z"
           fill="url(#a)"
         />
-        <path
-          d="M160 125c0-27 25-51 52-51h80v273c-1 26-25 49-51 50h-81V284c26 6 53 8 80 4 16-2 34-10 39-27 4-14 2-29 2-43v-34h-46v67c-2 14-15 22-28 22-16 0-48-12-48-12l1-136z"
-          fill="url(#b)"
-        />
+        <path d="M160 125c0-27 25-51 52-51h80v273c-1 26-25 49-51 50h-81V284c26 6 53 8 80 4 16-2 34-10 39-27 4-14 2-29 2-43v-34h-46v67c-2 14-15 22-28 22-16 0-48-12-48-12l1-136z" fill="url(#b)" />
         <path
           d="M310 197c-3 1-1-8-1-11v-64c2-27 27-49 54-48h78v273c-1 26-25 49-51 50h-81V273c18 15 43 17 66 17 17 0 35-2 51-6v-23c-19 9-41 15-62 10-14-4-25-18-25-33-2-16 8-32 23-37 19-6 40-2 58 6 4 2 8 5 6-2v-18c-30-7-62-9-92-2-9 3-17 7-24 12z"
           fill="url(#c)"
@@ -646,7 +639,7 @@ const icons = {
 const SwiftIconStyled = styled.i`
   svg {
     display: block;
-    ${(props) => (props.color && props.color == 'primary' ? `fill:${'#1b6191'};` : props.color ? `fill:${props.color};` : ``)}
+    ${(props) => (props.color && props.color == "primary" ? `fill:${"#1b6191"};` : props.color ? `fill:${props.color};` : ``)}
   }
 `
 

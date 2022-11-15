@@ -38,7 +38,6 @@
       "last 1 safari version"
     ]
   },
-  "bundleDependencies": false,
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.16.4",
@@ -51,12 +50,12 @@
     "moment": "^2.29.1",
     "polished": "^4.1.3",
     "prismjs": "^1.25.0",
-    "react": "^17.0.2",
+    "react": "^18.2.0",
     "react-bootstrap": "^2.0.2",
     "react-braintree-fields": "^1.6.0",
     "react-chips": "^0.8.0",
     "react-color": "^2.19.3",
-    "react-dom": "^17.0.2",
+    "react-dom": "^18.2.0",
     "react-dropzone": "^11.4.2",
     "react-google-autocomplete": "^2.6.1",
     "react-input-mask": "^2.0.4",
@@ -78,8 +77,8 @@
     "@babel/core": "^7.16.0",
     "@babel/plugin-transform-runtime": "^7.17.0",
     "prettier": "^2.5.1",
-    "react-scripts": "4.0.3",
-    "watch": "^1.0.2"
+    "react-scripts": "^5.0.1",
+    "watch": "^0.13.0"
   },
   "eslintConfig": {
     "extends": [
@@ -94,7 +93,6 @@
   ],
   "main": "dist/index.js",
   "name": "swift-tools",
-  "peerDependencies": {},
   "scripts": {
     "babel-version": "babel --version",
     "build": "rm -rf dist && NODE_ENV=production babel src/lib --out-dir dist --copy-files",
@@ -103,8 +101,11 @@
     "test": "react-scripts test",
     "watch": "watch 'NODE_ENV=production yarn run build' ./src"
   },
-  "version": "0.1.106",
+  "version": "0.1.109",
   "watch": {
     "build": "src/"
+  },
+  "engines": {
+    "node": "16.18.1"
   }
 }

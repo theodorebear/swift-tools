@@ -77,6 +77,40 @@ function App() {
 
 				<SwiftForm
 					onSubmit={() => {}}
+					inline={true}
+					resetOnSubmit={false}
+					fields={[
+						{
+							key: "name",
+							type: "text",
+							label: "Name",
+							value: null,
+							placeholder: "CRMLS, HARMLS, etc...",
+							onChange: (val) => {
+								//setMlsesParams({ ...mlsesParams, search: val, offset: 0 })
+							},
+						},
+						{
+							key: "status",
+							type: "select",
+							label: "Statuses",
+							value: null,
+							values: [
+								{ name: "Archived", value: "archived" },
+								{ name: "Requested", value: "requested" },
+								{ name: "Pending", value: "pending" },
+								{ name: "Active", value: "active" },
+							],
+							emptyLabel: "All Statuses",
+							onChange: (val) => {
+								//setMlsesParams({ ...mlsesParams, status: val, offset: 0 })
+							},
+						},
+					]}
+				/>
+
+				<SwiftForm
+					onSubmit={() => {}}
 					cols={8}
 					fields={[
 						{

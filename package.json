@@ -69,7 +69,6 @@
     "react-spinners": "^0.11.0",
     "styled-components": "^5.3.3",
     "suneditor-react": "^3.4.1",
-    "swift-tools": "^0.1.57",
     "web-vitals": "^1.0.1"
   },
   "deprecated": false,

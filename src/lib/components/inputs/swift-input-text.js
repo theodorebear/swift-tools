@@ -1,15 +1,15 @@
-import React, { useRef, useEffect, useState, useContext } from 'react'
-import { SwiftInputTextStyled } from './swift-input-text-style'
-import SwiftLabel from './swift-label'
+import React, { useRef, useEffect, useState, useContext } from "react"
+import { SwiftInputTextStyled } from "./swift-input-text-style"
+import SwiftLabel from "./swift-label"
 //import { _inputSearch } from "../../../ajax/agent/global"
-import classNames from 'classnames'
-import BarLoader from 'react-spinners/BarLoader'
-import SwiftButton from '../buttons/swift-button'
-import SwiftIcon from '../icons/swift-icon'
-import InputMask from 'react-input-mask'
-import valid from 'card-validator'
-import Autocomplete from 'react-google-autocomplete'
-import SwiftInputTooltip from './swift-input-tooltip'
+import classNames from "classnames"
+import BarLoader from "react-spinners/BarLoader"
+import SwiftButton from "../buttons/swift-button"
+import SwiftIcon from "../icons/swift-icon"
+import InputMask from "react-input-mask"
+import valid from "card-validator"
+import Autocomplete from "react-google-autocomplete"
+import SwiftInputTooltip from "./swift-input-tooltip"
 
 const SwiftInputText = (props) => {
   //const innerRef = useRef();
@@ -38,7 +38,7 @@ const SwiftInputText = (props) => {
   useEffect(() => {
     if (initialViewLoad.current || !props.search) {
       initialViewLoad.current = false
-      if (props.value && props.value != '' && props.search) {
+      if (props.value && props.value != "" && props.search) {
         // props.value.length didnt work for integer values
         handleVeneerGet()
       }
@@ -66,14 +66,14 @@ const SwiftInputText = (props) => {
     */
   }
 
-  if ((!props.value || props.value == '') && searchSelectionVeneer) {
+  if ((!props.value || props.value == "") && searchSelectionVeneer) {
     // !props.value.length didnt work for integer values
     //console.log('SwiftInputText - reinitialized text input value is blank, setting veneer blank')
     setSearchSelectionVeneer(null)
   }
 
   const handleSearch = async () => {
-    if (Object.keys(props.search).includes('min_length') && (props.value.length ?? 0) < props.search.min_length) {
+    if (Object.keys(props.search).includes("min_length") && (props.value.length ?? 0) < props.search.min_length) {
       return
     }
     setSearchResults(null)
@@ -87,54 +87,54 @@ const SwiftInputText = (props) => {
   }
 
   const handleChange = async (val) => {
-    if (props.mask == 'number' && val.replace(/\D/g, '').length) {
+    if (props.mask == "number" && val.replace(/\D/g, "").length) {
       val = String(val)
-      props.onChange(parseInt(val.replace(/\D/g, '')).toLocaleString())
-    } else if (props.mask == 'card_number') {
-      var ccValidate = valid.number(val.replaceAll('_', '').replaceAll(' ', ''))
+      props.onChange(parseInt(val.replace(/\D/g, "")).toLocaleString())
+    } else if (props.mask == "card_number") {
+      var ccValidate = valid.number(val.replaceAll("_", "").replaceAll(" ", ""))
       setCardNumberValidate(ccValidate)
       props.onChange({
         valid: ccValidate.isPotentiallyValid,
         complete: ccValidate.isValid,
-        value: val.replaceAll('_', '').replaceAll(' ', ''),
+        value: val.replaceAll("_", "").replaceAll(" ", ""),
         value_masked: val,
         type: ccValidate.card && ccValidate.card.type,
         cvv_len: ccValidate.card && ccValidate.card.code && ccValidate.card.code.size,
       })
-    } else if (props.mask == 'card_expiration') {
-      var cardExpValidate = valid.expirationDate(val.replaceAll('_', '').replaceAll(' ', ''))
+    } else if (props.mask == "card_expiration") {
+      var cardExpValidate = valid.expirationDate(val.replaceAll("_", "").replaceAll(" ", ""))
       const valExp = {
         valid: cardExpValidate.isPotentiallyValid,
         complete: cardExpValidate.isValid,
-        value: val.replaceAll('_', '').replaceAll(' ', ''),
+        value: val.replaceAll("_", "").replaceAll(" ", ""),
         value_masked: val,
       }
       props.onChange(valExp)
-    } else if (props.mask == 'card_cvv') {
-      var cardExpCvv = valid.cvv(val.replaceAll('_', '').replaceAll(' ', ''), props.maskLen ?? 3)
+    } else if (props.mask == "card_cvv") {
+      var cardExpCvv = valid.cvv(val.replaceAll("_", "").replaceAll(" ", ""), props.maskLen ?? 3)
       const valCvv = {
         valid: cardExpCvv.isPotentiallyValid,
         complete: cardExpCvv.isValid,
-        value: val.replaceAll('_', '').replaceAll(' ', ''),
+        value: val.replaceAll("_", "").replaceAll(" ", ""),
         value_masked: val,
       }
       //console.log("exp_cvv",valCvv)
       props.onChange(valCvv)
-    } else if (props.mask == 'zip_code') {
-      var cardZip = valid.postalCode(val.replaceAll('_', '').replaceAll(' ', ''), { minLength: 5 })
+    } else if (props.mask == "zip_code") {
+      var cardZip = valid.postalCode(val.replaceAll("_", "").replaceAll(" ", ""), { minLength: 5 })
       const valZip = {
         valid: cardZip.isPotentiallyValid,
         complete: cardZip.isValid,
-        value: val.replaceAll('_', '').replaceAll(' ', ''),
+        value: val.replaceAll("_", "").replaceAll(" ", ""),
         value_masked: val,
       }
       //console.log("zip_code",valZip)
       props.onChange(valZip)
-    } else if (props.mask == 'phone') {
+    } else if (props.mask == "phone") {
       const valPhone = {
         valid: true,
-        complete: val.replaceAll('_', '').length == 14 ? true : false,
-        value: val.replaceAll('_', '').replaceAll(' ', ''),
+        complete: val.replaceAll("_", "").length == 14 ? true : false,
+        value: val.replaceAll("_", "").replaceAll(" ", ""),
         value_masked: val,
       }
       //console.log("zip_code",valPhone)
@@ -168,14 +168,14 @@ const SwiftInputText = (props) => {
       color={props.color ?? undefined}
       theme={theme}
     >
-      {(props.label || !Object.keys(props).includes('label') || props.link) && (
+      {(props.label || !Object.keys(props).includes("label") || props.link) && (
         <div className="swift_input_text_label">
           {props.label ? (
-            <SwiftLabel theme={theme} htmlFor={'swift_tools_form_input_text_' + props.name}>
+            <SwiftLabel theme={theme} htmlFor={"swift_tools_form_input_text_" + props.name}>
               {props.label}
             </SwiftLabel>
-          ) : !Object.keys(props).includes('label') ? (
-            <SwiftLabel theme={theme} htmlFor={'swift_tools_form_input_text_' + props.name}>
+          ) : !Object.keys(props).includes("label") ? (
+            <SwiftLabel theme={theme} htmlFor={"swift_tools_form_input_text_" + props.name}>
               {props.name}
             </SwiftLabel>
           ) : null}
@@ -183,14 +183,14 @@ const SwiftInputText = (props) => {
             <div className="swift_input_text_label_link">
               {props.link.onClick ? (
                 <a onClick={props.link.onClick}>
-                  <span>{props.link.label || 'View'}</span>
+                  <span>{props.link.label || "View"}</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <path d="M0 3.795l2.995-2.98 11.132 11.185-11.132 11.186-2.995-2.981 8.167-8.205-8.167-8.205zm18.04 8.205l-8.167 8.205 2.995 2.98 11.132-11.185-11.132-11.186-2.995 2.98 8.167 8.206z" />
                   </svg>
                 </a>
               ) : (
                 <a target="_blank" href={props.link.url ? props.link.url : props.link}>
-                  <span>{props.link.label || 'View'}</span>
+                  <span>{props.link.label || "View"}</span>
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
                     <path d="M0 3.795l2.995-2.98 11.132 11.185-11.132 11.186-2.995-2.981 8.167-8.205-8.167-8.205zm18.04 8.205l-8.167 8.205 2.995 2.98 11.132-11.185-11.132-11.186-2.995 2.98 8.167 8.206z" />
                   </svg>
@@ -207,59 +207,59 @@ const SwiftInputText = (props) => {
         </div>
       )}
       <div className="swift_input_text_input" onClick={props.onClick ?? undefined}>
-        <div className={classNames('swift_input_text_input_element', props.error && props.helperText && 'error')}>
+        <div className={classNames("swift_input_text_input_element", props.error && props.helperText && "error")}>
           {icon ? (
-            <SwiftIcon className="swift_input_text_input_icon" i={icon} color={props.icon_color || 'primary'} />
-          ) : props.mask == 'card_number' ? (
+            <SwiftIcon className="swift_input_text_input_icon" i={icon} color={props.icon_color || "primary"} />
+          ) : props.mask == "card_number" ? (
             cardNumberValidate && cardNumberValidate.card && cardNumberValidate.card.type ? (
-              <SwiftIcon className="swift_input_text_input_icon" i={'card_' + cardNumberValidate.card.type.replace('-', '_')} />
+              <SwiftIcon className="swift_input_text_input_icon" i={"card_" + cardNumberValidate.card.type.replace("-", "_")} />
             ) : (
-              <SwiftIcon className="swift_input_text_input_icon" i={'card_default'} />
+              <SwiftIcon className="swift_input_text_input_icon" i={"card_default"} />
             )
           ) : null}
 
-          {format == 'address' ? (
+          {format == "address" ? (
             <Autocomplete
-              apiKey={'AIzaSyBl03rhZ-2dpk1Dg6ef3-gM75VBdwZ1P70'}
+              apiKey={"AIzaSyBl03rhZ-2dpk1Dg6ef3-gM75VBdwZ1P70"}
               onPlaceSelected={(place) => {
                 props.onAddressUpdate(place)
               }}
               placeholder=""
-              options={{ types: ['address'] }}
+              options={{ types: ["address"] }}
               //componentRestrictions={{ country: ['us', 'ca'] }}
-              fields={['address_components', 'geometry']}
-              libraries={['places']}
+              fields={["address_components", "geometry"]}
+              libraries={["places"]}
             />
           ) : (
             <InputMask
-              type={inputType ? inputType : 'text'}
+              type={inputType ? inputType : "text"}
               name={props.name}
-              id={'swift_tools_form_input_text_' + props.name}
-              inputRef={(el) => (myRefs.current[index] = el)}
+              id={"swift_tools_form_input_text_" + props.name}
+              inputRef={myRefs && myRefs.current ? (el) => (myRefs.current[index] = el) : undefined}
               placeholder={props.placeholder}
               // autoFocus={props.autoFocus}
               disabled={props.disabled}
-              value={typeof props.value === 'object' && Object.keys(props.value).includes('value') ? props.value.value : props.value}
+              value={typeof props.value === "object" && Object.keys(props.value).includes("value") ? props.value.value : props.value}
               mask={
                 props.mask
-                  ? props.mask == 'phone'
-                    ? '(999) 999-9999'
-                    : props.mask == 'zip_code'
-                    ? '99999'
-                    : props.mask == 'card_cvv' && props.maskLen
+                  ? props.mask == "phone"
+                    ? "(999) 999-9999"
+                    : props.mask == "zip_code"
+                    ? "99999"
+                    : props.mask == "card_cvv" && props.maskLen
                     ? props.maskLen == 4
-                      ? '9999'
-                      : '999'
-                    : props.mask == 'card_expiration'
-                    ? '99 / 99'
-                    : props.mask == 'card_number'
-                    ? cardNumberValidate && cardNumberValidate.card && cardNumberValidate.card.type == 'american-express'
-                      ? '9999 999999 99999'
-                      : cardNumberValidate && cardNumberValidate.card && cardNumberValidate.card.type == 'diners-club'
-                      ? '9999 999999 9999'
-                      : '9999 9999 9999 9999'
-                    : props.mask == 'ach_routing'
-                    ? '999999999'
+                      ? "9999"
+                      : "999"
+                    : props.mask == "card_expiration"
+                    ? "99 / 99"
+                    : props.mask == "card_number"
+                    ? cardNumberValidate && cardNumberValidate.card && cardNumberValidate.card.type == "american-express"
+                      ? "9999 999999 99999"
+                      : cardNumberValidate && cardNumberValidate.card && cardNumberValidate.card.type == "diners-club"
+                      ? "9999 999999 9999"
+                      : "9999 9999 9999 9999"
+                    : props.mask == "ach_routing"
+                    ? "999999999"
                     : null
                   : null
               }
@@ -292,10 +292,10 @@ const SwiftInputText = (props) => {
                 // }
               }}
               onChange={(e) => handleChange(e.currentTarget.value)}
-              autoCorrect={props.autoCorrect === false || props.search ? 'off' : 'on'}
+              autoCorrect={props.autoCorrect === false || props.search ? "off" : "on"}
               // spellCheck={props.autoCorrect === false ? 'off' : 'on'}
-              autoCapitalize={props.autoCapitalize === false || props.search ? 'off' : 'on'}
-              autoComplete={props.autoComplete === false || props.search ? 'off' : 'on'}
+              autoCapitalize={props.autoCapitalize === false || props.search ? "off" : "on"}
+              autoComplete={props.autoComplete === false || props.search ? "off" : "on"}
             />
           )}
 
@@ -315,14 +315,14 @@ const SwiftInputText = (props) => {
                 <ul>
                   {searchResults.map((elem) => (
                     <li
-                      key={elem['id']}
+                      key={elem["id"]}
                       onMouseDown={() => {
                         setSearchResults(null)
-                        setSearchSelectionVeneer(elem['search_result_display'])
-                        props.onChange(elem[props.search.field ?? 'id'])
+                        setSearchSelectionVeneer(elem["search_result_display"])
+                        props.onChange(elem[props.search.field ?? "id"])
                       }}
                     >
-                      {elem['search_result_display']}
+                      {elem["search_result_display"]}
                     </li>
                   ))}
                 </ul>
@@ -330,29 +330,29 @@ const SwiftInputText = (props) => {
             </div>
           ) : null}
 
-          {props.type == 'password' && (
+          {props.type == "password" && (
             <div
               className="swift_input_text_input_password_view"
               onClick={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
-                setInputType(inputType == 'password' ? 'text' : 'password')
+                setInputType(inputType == "password" ? "text" : "password")
               }}
             >
-              <SwiftIcon i={inputType == 'password' ? 'eye' : 'eye_cancel'} />
+              <SwiftIcon i={inputType == "password" ? "eye" : "eye_cancel"} />
             </div>
           )}
         </div>
 
         {props.submit_button && (
           <SwiftButton className="swift_input_text_submit_button" {...props.submit_button}>
-            {props.submit_button.label || 'Submit'}
+            {props.submit_button.label || "Submit"}
           </SwiftButton>
         )}
       </div>
 
       {props.sublabel ? (
-        <SwiftLabel theme={theme} style={{ marginTop: '8px', opacity: 0.4 }} className="swift_input_text_sublabel">
+        <SwiftLabel theme={theme} style={{ marginTop: "8px", opacity: 0.4 }} className="swift_input_text_sublabel">
           {props.sublabel}
         </SwiftLabel>
       ) : null}
@@ -366,9 +366,9 @@ const SwiftInputText = (props) => {
 }
 SwiftInputText.defaultProps = {
   icon: null,
-  value: '',
+  value: "",
   search: null,
-  theme: 'default',
+  theme: "default",
   fieldRef: null,
 }
 

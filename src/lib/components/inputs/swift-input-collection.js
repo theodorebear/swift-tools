@@ -1,14 +1,14 @@
-import React, { useRef, useEffect, useState } from 'react'
-import { SwiftInputCollectionStyled } from './swift-input-collection-style'
-import SwiftLabel from './swift-label'
-import SwiftInputText from './swift-input-text'
-import SwiftSelect from './swift-select'
-import { Flex, GridItem, Box } from '../grid'
-import SwiftInputCheckbox from './swift-input-checkbox'
-import SwiftDrop from './swift-drop'
-import SwiftInputColor from './swift-input-color'
-import SwiftInputHidden from './swift-input-hidden'
-import SwiftInputSelectModal from './swift-input-select-modal'
+import React, { useRef, useEffect, useState } from "react"
+import { SwiftInputCollectionStyled } from "./swift-input-collection-style"
+import SwiftLabel from "./swift-label"
+import SwiftInputText from "./swift-input-text"
+import SwiftSelect from "./swift-select"
+import { Flex, GridItem, Box } from "../grid"
+import SwiftInputCheckbox from "./swift-input-checkbox"
+import SwiftDrop from "./swift-drop"
+import SwiftInputColor from "./swift-input-color"
+import SwiftInputHidden from "./swift-input-hidden"
+import SwiftInputSelectModal from "./swift-input-select-modal"
 
 const SwiftInputCollection = (props) => {
 	const { value, placeholders, schema, allowCreate, allowRemove } = props
@@ -46,7 +46,7 @@ const SwiftInputCollection = (props) => {
 					//console.log("elem", elem)
 					return (
 						<Flex
-							key={'collection-' + i}
+							key={"collection-" + i}
 							wrap="wrap"
 							gridColumnGap={elem.length !== 0 || schema.length > 1 ? 3 : 0}
 							justify="space-between"
@@ -69,84 +69,79 @@ const SwiftInputCollection = (props) => {
 									}
 								})
 								.map((schemaItem, schemaIndex) => {
-									if (schemaItem['type'] == 'hidden') {
-										return (
-											<SwiftInputHidden
-												type="hidden"
-												key={schemaIndex}
-												name={schemaItem['name'] || schemaIndex}
-												value={elem[schemaItem['name'] || schemaIndex] || ''}
-											/>
-										)
+									if (schemaItem["type"] == "hidden") {
+										return <SwiftInputHidden type="hidden" key={schemaIndex} name={schemaItem["name"] || schemaIndex} value={elem[schemaItem["name"] || schemaIndex] || ""} />
 									}
 									//console.log("schemaaaa", schemaItem, schemaItem["name"] || schemaIndex)
 									return (
 										<Box flex="1" wrap="wrap" key={schemaIndex}>
-											{schemaItem['type'] == 'checkbox' ? (
+											{schemaItem["type"] == "checkbox" ? (
 												// doesnt work yet..
 												<SwiftInputCheckbox
 													{...schemaItem}
-													label={schemaItem['label'] || schemaItem['name']}
-													name={(schemaItem['name'] || schemaIndex) + i}
+													label={schemaItem["label"] || schemaItem["name"]}
+													name={(schemaItem["name"] || schemaIndex) + i}
 													onChange={(e) => {
 														handleChange(
 															i,
-															schemaItem['name'] || schemaIndex,
-															elem[schemaItem['name'] || schemaIndex] &&
-																elem[schemaItem['name'] || schemaIndex] != 0
-																? 0
-																: 1
+															schemaItem["name"] || schemaIndex,
+															elem[schemaItem["name"] || schemaIndex] && elem[schemaItem["name"] || schemaIndex] != 0 ? 0 : 1
 														)
 													}}
-													checked={elem[schemaItem['name'] || schemaIndex] == 1}
+													checked={elem[schemaItem["name"] || schemaIndex] == 1}
 												/>
-											) : schemaItem['type'] == 'select' ? (
+											) : schemaItem["type"] == "select" ? (
 												<SwiftSelect
 													{...schemaItem}
-													label={schemaItem['label'] || schemaItem['name']}
+													label={schemaItem["label"] || schemaItem["name"]}
 													values={schemaItem.values || []}
-													value={elem[schemaItem['name'] || schemaIndex] || ''}
-													name={schemaItem['name'] || schemaIndex}
+													value={elem[schemaItem["name"] || schemaIndex] || ""}
+													name={schemaItem["name"] || schemaIndex}
 													onChange={(e) => {
-														handleChange(i, schemaItem['name'] || schemaIndex, e.currentTarget.value)
+														handleChange(i, schemaItem["name"] || schemaIndex, e.currentTarget.value)
 													}}
 												/>
-											) : schemaItem['type'] == 'color' ? (
+											) : schemaItem["type"] == "color" ? (
 												<SwiftInputColor
 													{...schemaItem}
-													label={schemaItem['label'] || schemaItem['name']}
-													name={schemaItem['name'] || schemaIndex}
-													value={elem[schemaItem['name'] || schemaIndex] || ''}
+													label={schemaItem["label"] || schemaItem["name"]}
+													name={schemaItem["name"] || schemaIndex}
+													value={elem[schemaItem["name"] || schemaIndex] || ""}
 													onChange={(val) => {
-														handleChange(i, schemaItem['name'] || schemaIndex, val)
+														handleChange(i, schemaItem["name"] || schemaIndex, val)
 													}}
 												/>
-											) : schemaItem['type'] == 'file' ? (
+											) : schemaItem["type"] == "file" ? (
 												<SwiftDrop
 													{...schemaItem}
 													accept={null}
 													maxSize={10000000}
-													status={elem[schemaItem['name'] || schemaIndex] ? 'success' : 'accept'}
-													files={elem[schemaItem['name'] || schemaIndex] ?? []}
+													status={elem[schemaItem["name"] || schemaIndex] ? "success" : "accept"}
+													files={elem[schemaItem["name"] || schemaIndex] ?? []}
 													setFiles={(vals) => {
-														handleChange(i, schemaItem['name'] || schemaIndex, vals)
+														handleChange(i, schemaItem["name"] || schemaIndex, vals)
 													}}
 												/>
-											) : schemaItem['type'] == 'select-modal' ? (
+											) : schemaItem["type"] == "select-modal" ? (
 												<SwiftInputSelectModal
 													{...schemaItem}
-													name={schemaItem['name'] || schemaIndex}
-													onChange={(valNew) => handleChange(i, schemaItem['name'] || schemaIndex, valNew)}
-													value={elem[schemaItem['name'] || schemaIndex] || ''}
+													name={schemaItem["name"] || schemaIndex}
+													onChange={(valNew) => handleChange(i, schemaItem["name"] || schemaIndex, valNew)}
+													value={elem[schemaItem["name"] || schemaIndex] || ""}
 												/>
 											) : (
 												<SwiftInputText
 													{...schemaItem}
 													//placeholder={placeholders && placeholders[0]}
-													search={schemaItem['search'] || undefined}
-													name={schemaItem['name'] || schemaIndex}
-													onChange={(valNew) => handleChange(i, schemaItem['name'] || schemaIndex, valNew)}
-													value={elem[schemaItem['name'] || schemaIndex] || ''}
+													search={schemaItem["search"] || undefined}
+													link={
+														schemaItem["link"] && elem[schemaItem["name"] || schemaIndex]
+															? { ...schemaItem["link"], url: schemaItem["link"]["url"].replace("{value}", elem[schemaItem["name"] || schemaIndex]) }
+															: undefined
+													}
+													name={schemaItem["name"] || schemaIndex}
+													onChange={(valNew) => handleChange(i, schemaItem["name"] || schemaIndex, valNew)}
+													value={elem[schemaItem["name"] || schemaIndex] || ""}
 												/>
 											)}
 										</Box>
@@ -156,13 +151,7 @@ const SwiftInputCollection = (props) => {
 							{allowRemove && (
 								<Flex direction="column" justify="center" className="swift_input_collection_item_actions">
 									{elem.length !== 0 && (
-										<Flex
-											className="swift_input_collection_item_delete"
-											flex=""
-											justify="center"
-											onClick={() => handleDelete(i)}
-											style={{ opacity: i == value.length ? '0' : '' }}
-										>
+										<Flex className="swift_input_collection_item_delete" flex="" justify="center" onClick={() => handleDelete(i)} style={{ opacity: i == value.length ? "0" : "" }}>
 											<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 												<path d="M24 20.188l-8.315-8.209 8.2-8.282-3.697-3.697-8.212 8.318-8.31-8.203-3.666 3.666 8.321 8.24-8.206 8.313 3.666 3.666 8.237-8.318 8.285 8.203z" />
 											</svg>

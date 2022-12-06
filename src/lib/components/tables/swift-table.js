@@ -44,12 +44,13 @@ const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactiv
           <Moment calendar={calendarFormats["date"]}>{cellValue}</Moment>
         ) : column["type"] == "stats" ? (
           <ul>
-            {cellValue.items.map((elem) => (
-              <li>
-                <strong style={elem.style ?? {}}>{elem.value || 0}</strong>
-                <span>{elem.name}</span>
-              </li>
-            ))}
+            {cellValue.items &&
+              cellValue.items.map((elem) => (
+                <li>
+                  <strong style={elem.style ?? {}}>{elem.value || 0}</strong>
+                  <span>{elem.name}</span>
+                </li>
+              ))}
           </ul>
         ) : column["type"] == "icon" ? (
           <>
@@ -57,11 +58,7 @@ const SwiftTableCellContent = ({ rowKey, data, index, cellValue, column, inactiv
             {cellValue.value && <span>{cellValue.value}</span>}
           </>
         ) : column["type"] == "stack" ? (
-          <ul>
-            {cellValue.items.map((elem) => (
-              <li style={elem.style ?? {}}>{elem.name}</li>
-            ))}
-          </ul>
+          <ul>{cellValue.items && cellValue.items.map((elem) => <li style={elem.style ?? {}}>{elem.name}</li>)}</ul>
         ) : column["type"] == "boolean" ? (
           <>
             {cellValue && cellValue !== "0" && cellValue !== 0 ? (

@@ -7,7 +7,7 @@ import { numberShorten } from "../../helpers"
 const SwiftInputMinMax = (props) => {
   //console.log('SwiftInputMinMax - props', props)
 
-  const { value, suggestions, suggestionLabels, suggestionFormat, emptyLabel, format, onChange, onSelectMax } = props
+  const { value, suggestions, suggestionLabels, suggestionFormat, emptyLabel, format, onChange, onSelectMax, allowEqual } = props
 
   const [focus, setFocus] = useState(null)
   const [maxFocused, setMaxFocused] = useState(null)
@@ -105,9 +105,7 @@ const SwiftInputMinMax = (props) => {
               }}
             />
             {!minFocused && (!valueMin || format == "cost") ? (
-              <div className="swift-input-minmax-input-veneer">
-                {!minFocused && !valueMin ? emptyLabel : !minFocused && format == "cost" ? "$" + parseInt(valueMin).toLocaleString() : null}
-              </div>
+              <div className="swift-input-minmax-input-veneer">{!minFocused && !valueMin ? emptyLabel : !minFocused && format == "cost" ? "$" + parseInt(valueMin).toLocaleString() : null}</div>
             ) : null}
           </div>
 
@@ -170,9 +168,7 @@ const SwiftInputMinMax = (props) => {
             />
 
             {!maxFocused && (!valueMax || format == "cost") ? (
-              <div className="swift-input-minmax-input-veneer">
-                {!maxFocused && !valueMax ? emptyLabel : !maxFocused && format == "cost" ? "$" + parseInt(valueMax).toLocaleString() : null}
-              </div>
+              <div className="swift-input-minmax-input-veneer">{!maxFocused && !valueMax ? emptyLabel : !maxFocused && format == "cost" ? "$" + parseInt(valueMax).toLocaleString() : null}</div>
             ) : null}
           </div>
           {suggestions && maxFocused && (
@@ -223,6 +219,7 @@ SwiftInputMinMax.defaultProps = {
   suggestionFormat: "%s",
   emptyLabel: "Any",
   format: null,
+  allowEqual: false,
   onSelectMax: () => {},
 }
 

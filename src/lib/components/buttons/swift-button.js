@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import classNames from 'classnames'
-import BarLoader from 'react-spinners/BarLoader'
-import { SwiftButtonStyled } from './swift-button-style'
-import { darken } from 'polished'
-import SwiftIcon from '../icons/swift-icon'
-import IndicatorSimple from '../indicator/simple'
+import React, { useEffect, useState, useContext } from "react"
+import classNames from "classnames"
+import BarLoader from "react-spinners/BarLoader"
+import { SwiftButtonStyled } from "./swift-button-style"
+import { darken } from "polished"
+import SwiftIcon from "../icons/swift-icon"
+import IndicatorSimple from "../indicator/simple"
+import { SwiftTheme } from "../providers"
 
 const SwiftButtonContent = (props) => {
   //console.log("SPC props", props);
@@ -39,20 +40,22 @@ const SwiftButtonContent = (props) => {
 const SwiftButton = (props) => {
   useEffect(() => {}, [props])
 
+  const swiftTheme = useContext(SwiftTheme)
+
   const [modal, setModal] = useState(null)
 
   return (
     <>
       <SwiftButtonStyled
-        className={classNames(props.disabled ? 'disabled' : null, props.className || null, 'swift-button')}
+        className={classNames(props.disabled ? "disabled" : null, props.className || null, "swift-button")}
         flip={props.flip ?? null}
         type={props.type}
         size={props.size ?? null}
         inlineForm={props.inlineForm ?? null}
         width={props.width ?? null}
         variant={props.variant ?? null}
-        fillType={props.fillType ?? 'filled'}
-        buttonColor={props.color ?? '#5ab89e'}
+        fillType={props.fillType ?? "filled"}
+        buttonColor={props.color ?? swiftTheme.color.primary}
         disabled={props.disabled ?? null}
         isLoading={props.loading ?? undefined}
         style={props.style ?? undefined}
@@ -67,8 +70,8 @@ const SwiftButton = (props) => {
   )
 }
 SwiftButton.defaultProps = {
-  theme: 'default',
-  size: 'medium',
+  theme: "default",
+  size: "medium",
 }
 
 export default SwiftButton

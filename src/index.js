@@ -81,35 +81,43 @@ function App() {
 					resetOnSubmit={false}
 					fields={[
 						{
-							key: "name",
-							type: "text",
-							label: "Name",
-							value: null,
-							placeholder: "CRMLS, HARMLS, etc...",
-							onChange: (val) => {
-								//setMlsesParams({ ...mlsesParams, search: val, offset: 0 })
-							},
+							type: "otp",
+							key: "otp",
+							label: "For security, please enter a One-Time Password from your SMS or Authenticator app.",
+							autoFocus: true,
+							validate: true,
+							autoSubmit: true,
 						},
-						{
-							key: "status",
-							type: "select",
-							label: "Statuses",
-							value: null,
-							values: [
-								{ name: "Archived", value: "archived" },
-								{ name: "Requested", value: "requested" },
-								{ name: "Pending", value: "pending" },
-								{ name: "Active", value: "active" },
-							],
-							emptyLabel: "All Statuses",
-							onChange: (val) => {
-								//setMlsesParams({ ...mlsesParams, status: val, offset: 0 })
-							},
-						},
+						// {
+						// 	key: "name",
+						// 	type: "text",
+						// 	label: "Name",
+						// 	value: null,
+						// 	placeholder: "CRMLS, HARMLS, etc...",
+						// 	onChange: (val) => {
+						// 		//setMlsesParams({ ...mlsesParams, search: val, offset: 0 })
+						// 	},
+						// },
+						// {
+						// 	key: "status",
+						// 	type: "select",
+						// 	label: "Statuses",
+						// 	value: null,
+						// 	values: [
+						// 		{ name: "Archived", value: "archived" },
+						// 		{ name: "Requested", value: "requested" },
+						// 		{ name: "Pending", value: "pending" },
+						// 		{ name: "Active", value: "active" },
+						// 	],
+						// 	emptyLabel: "All Statuses",
+						// 	onChange: (val) => {
+						// 		//setMlsesParams({ ...mlsesParams, status: val, offset: 0 })
+						// 	},
+						// },
 					]}
 				/>
 
-				<SwiftForm
+				{/*<SwiftForm
 					onSubmit={() => {}}
 					cols={8}
 					fields={[
@@ -137,7 +145,7 @@ function App() {
 							label: "Create",
 						},
 					]}
-				/>
+				/>*/}
 
 				{/*<SwiftForm
 					onSubmit={(vals) => console.log(vals)}

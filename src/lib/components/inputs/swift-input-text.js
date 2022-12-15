@@ -13,10 +13,12 @@ import SwiftInputTooltip from "./swift-input-tooltip"
 
 const SwiftInputText = (props) => {
   //const innerRef = useRef();
-  useEffect(() => {
-    if (props.autoFocus && props.fieldRef) props.fieldRef?.current?.focus()
-  }, [])
+
   const { icon, theme, myRefs, index, format } = props
+
+  useEffect(() => {
+    if (props.autoFocus && myRefs.current[index]) myRefs.current[index]?.focus()
+  }, [])
 
   const [inputType, setInputType] = useState(props.type)
   useEffect(() => {
@@ -229,6 +231,7 @@ const SwiftInputText = (props) => {
               //componentRestrictions={{ country: ['us', 'ca'] }}
               fields={["address_components", "geometry"]}
               libraries={["places"]}
+              //ref={myRefs && myRefs.current ? (el) => (myRefs.current[index] = el) : undefined}
             />
           ) : (
             <InputMask
@@ -237,6 +240,7 @@ const SwiftInputText = (props) => {
               id={"swift_tools_form_input_text_" + props.name}
               inputRef={myRefs && myRefs.current ? (el) => (myRefs.current[index] = el) : undefined}
               placeholder={props.placeholder}
+              // placeholder={props.placeholder ? props.placeholder : props.search && focused ? "Search..." : null}
               // autoFocus={props.autoFocus}
               disabled={props.disabled}
               value={typeof props.value === "object" && Object.keys(props.value).includes("value") ? props.value.value : props.value}

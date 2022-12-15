@@ -28,7 +28,8 @@ const SwiftProvider = ({ CustomLink, branding, children }) => {
   return (
     <SwiftLinkContext.Provider value={CustomLink}>
       <SwiftTheme.Provider value={branding}>
-        <ThemeProvider theme={branding}>{children}</ThemeProvider>
+        {/*<ThemeProvider theme={branding}>{children}</ThemeProvider>*/}
+        {children}
       </SwiftTheme.Provider>
     </SwiftLinkContext.Provider>
   )

@@ -1,6 +1,6 @@
-import React, { createRef, useRef, useEffect, useState, PureComponent } from 'react'
-import { SwiftInputOTPStyled } from './swift-input-otp-style'
-import SwiftLabel from './swift-label'
+import React, { createRef, useRef, useEffect, useState, PureComponent } from "react"
+import { SwiftInputOTPStyled } from "./swift-input-otp-style"
+import SwiftLabel from "./swift-label"
 
 // keyCode constants
 const BACKSPACE = 8
@@ -13,7 +13,7 @@ const SPACEBAR = 32
 // Basic implementation to check if it's not a string
 // of classNames and is an Object
 // TODO: Better implementation
-const isStyleObject = (obj) => typeof obj === 'object'
+const isStyleObject = (obj) => typeof obj === "object"
 
 class SingleOtpInput extends PureComponent {
   constructor(props) {
@@ -44,59 +44,39 @@ class SingleOtpInput extends PureComponent {
     }
   }
 
-  getClasses = (...classes) => classes.filter((c) => !isStyleObject(c) && c !== false).join(' ')
+  getClasses = (...classes) => classes.filter((c) => !isStyleObject(c) && c !== false).join(" ")
 
   getType = () => {
     const { isInputSecure, isInputNum } = this.props
 
     if (isInputSecure) {
-      return 'password'
+      return "password"
     }
 
     if (isInputNum) {
-      return 'tel'
+      return "tel"
     }
 
-    return 'text'
+    return "text"
   }
 
   render() {
-    const {
-      placeholder,
-      separator,
-      isLastChild,
-      focus,
-      isDisabled,
-      hasErrored,
-      errorStyle,
-      focusStyle,
-      disabledStyle,
-      shouldAutoFocus,
-      isInputNum,
-      index,
-      value,
-      className,
-      isInputSecure,
-      ...rest
-    } = this.props
+    const { placeholder, separator, isLastChild, focus, isDisabled, hasErrored, errorStyle, focusStyle, disabledStyle, shouldAutoFocus, isInputNum, index, value, className, isInputSecure, ...rest } =
+      this.props
 
     return (
-      <div className={className} style={{ display: 'flex', alignItems: 'center' }}>
+      <div className={className} style={{ display: "flex", alignItems: "center" }}>
         <input
-          aria-label={`${index === 0 ? 'Please enter verification code. ' : ''}${isInputNum ? 'Digit' : 'Character'} ${index + 1}`}
+          aria-label={`${index === 0 ? "Please enter verification code. " : ""}${isInputNum ? "Digit" : "Character"} ${index + 1}`}
           autoComplete="off"
-          style={Object.assign(
-            focus && isStyleObject(focusStyle) && focusStyle,
-            isDisabled && isStyleObject(disabledStyle) && disabledStyle,
-            hasErrored && isStyleObject(errorStyle) && errorStyle
-          )}
+          style={Object.assign(focus && isStyleObject(focusStyle) && focusStyle, isDisabled && isStyleObject(disabledStyle) && disabledStyle, hasErrored && isStyleObject(errorStyle) && errorStyle)}
           placeholder={placeholder}
           className={this.getClasses(focus && focusStyle, isDisabled && disabledStyle, hasErrored && errorStyle)}
           type={this.getType()}
           maxLength="1"
           ref={this.input}
           disabled={isDisabled}
-          value={value ? value : ''}
+          value={value ? value : ""}
           {...rest}
         />
         {!isLastChild && separator}
@@ -106,20 +86,27 @@ class SingleOtpInput extends PureComponent {
 }
 
 const SwiftInputOTP = (props) => {
+  // useEffect(() => {
+  //   console.log("props.fieldRef", props.fieldRef)
+  //   if (props.autoFocus && props.fieldRef) props.fieldRef?.current?.focus()
+  // }, [])
+
+  const { myRefs } = props
+
   const [activeInput, setActiveInput] = useState(0)
 
-  const getOtpValue = () => (props.value ? props.value.toString().split('') : [])
+  const getOtpValue = () => (props.value ? props.value.toString().split("") : [])
 
   const getPlaceholderValue = () => {
     const { placeholder, numInputs } = props
 
-    if (typeof placeholder === 'string') {
+    if (typeof placeholder === "string") {
       if (placeholder.length === numInputs) {
         return placeholder
       }
 
       if (placeholder.length > 0) {
-        console.error('Length of the placeholder should be equal to the number of inputs.')
+        console.error("Length of the placeholder should be equal to the number of inputs.")
       }
     }
   }
@@ -127,13 +114,13 @@ const SwiftInputOTP = (props) => {
   // Helper to return OTP from input
   const handleOtpChange = (otp) => {
     const { onChange } = props
-    const otpValue = otp.join('')
+    const otpValue = otp.join("")
 
     onChange(otpValue)
   }
 
   const isInputValueValid = (value) => {
-    const isTypeValid = props.isInputNum ? !isNaN(parseInt(value, 10)) : typeof value === 'string'
+    const isTypeValid = props.isInputNum ? !isNaN(parseInt(value, 10)) : typeof value === "string"
 
     return isTypeValid && value.trim().length === 1
   }
@@ -206,20 +193,20 @@ const SwiftInputOTP = (props) => {
 
   // Handle cases of backspace, delete, left arrow, right arrow, space
   const handleOnKeyDown = (e) => {
-    if (e.keyCode === BACKSPACE || e.key === 'Backspace') {
+    if (e.keyCode === BACKSPACE || e.key === "Backspace") {
       e.preventDefault()
-      changeCodeAtFocus('')
+      changeCodeAtFocus("")
       focusPrevInput()
-    } else if (e.keyCode === DELETE || e.key === 'Delete') {
+    } else if (e.keyCode === DELETE || e.key === "Delete") {
       e.preventDefault()
-      changeCodeAtFocus('')
-    } else if (e.keyCode === LEFT_ARROW || e.key === 'ArrowLeft') {
+      changeCodeAtFocus("")
+    } else if (e.keyCode === LEFT_ARROW || e.key === "ArrowLeft") {
       e.preventDefault()
       focusPrevInput()
-    } else if (e.keyCode === RIGHT_ARROW || e.key === 'ArrowRight') {
+    } else if (e.keyCode === RIGHT_ARROW || e.key === "ArrowRight") {
       e.preventDefault()
       focusNextInput()
-    } else if (e.keyCode === SPACEBAR || e.key === ' ' || e.key === 'Spacebar' || e.key === 'Space') {
+    } else if (e.keyCode === SPACEBAR || e.key === " " || e.key === "Spacebar" || e.key === "Space") {
       e.preventDefault()
     }
   }
@@ -234,9 +221,9 @@ const SwiftInputOTP = (props) => {
       if (!props.isInputNum) {
         const { nativeEvent } = e
 
-        if (nativeEvent.data === null && nativeEvent.inputType === 'deleteContentBackward') {
+        if (nativeEvent.data === null && nativeEvent.inputType === "deleteContentBackward") {
           e.preventDefault()
-          changeCodeAtFocus('')
+          changeCodeAtFocus("")
           focusPrevInput()
         }
       }
@@ -244,25 +231,13 @@ const SwiftInputOTP = (props) => {
   }
 
   const renderInputs = () => {
-    const {
-      numInputs,
-      focusStyle,
-      separator,
-      isDisabled,
-      disabledStyle,
-      hasErrored,
-      errorStyle,
-      shouldAutoFocus,
-      isInputNum,
-      isInputSecure,
-      className,
-    } = props
+    const { numInputs, focusStyle, separator, isDisabled, disabledStyle, hasErrored, errorStyle, autoFocus, isInputNum, isInputSecure, className } = props
 
     const inputs = []
     const otp = getOtpValue()
     const placeholder = getPlaceholderValue()
-    const dataCy = props['data-cy']
-    const dataTestId = props['data-testid']
+    const dataCy = props["data-cy"]
+    const dataTestId = props["data-testid"]
 
     for (let i = 0; i < numInputs; i++) {
       inputs.push(
@@ -288,7 +263,7 @@ const SwiftInputOTP = (props) => {
           disabledStyle={disabledStyle}
           hasErrored={hasErrored}
           errorStyle={errorStyle}
-          shouldAutoFocus={shouldAutoFocus}
+          shouldAutoFocus={autoFocus}
           isInputNum={isInputNum}
           isInputSecure={isInputSecure}
           className={className}
@@ -302,11 +277,7 @@ const SwiftInputOTP = (props) => {
   }
 
   return (
-    <SwiftInputOTPStyled
-      error={props.error && props.helperText ? true : false}
-      entered={props.value ? true : false}
-      valuesCount={props.values ? props.values.length : 0}
-    >
+    <SwiftInputOTPStyled error={props.error && props.helperText ? true : false} entered={props.value ? true : false} valuesCount={props.values ? props.values.length : 0}>
       <SwiftLabel>{props.label}</SwiftLabel>
       <div className="swift_input_otp_wrapper">{renderInputs()}</div>
       {props.error && props.helperText ? <SwiftLabel error>{props.helperText}</SwiftLabel> : null}
@@ -317,9 +288,9 @@ SwiftInputOTP.defaultProps = {
   numInputs: 6,
   onChange: (otp) => {},
   isDisabled: false,
-  shouldAutoFocus: false,
-  value: '',
+  value: "",
   isInputSecure: false,
+  autoFocus: false,
 }
 
 export default SwiftInputOTP

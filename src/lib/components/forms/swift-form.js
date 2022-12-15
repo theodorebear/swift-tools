@@ -592,7 +592,6 @@ const SwiftFormItem = (props) => {
           }}
           autoCorrect={false}
           autoComplete={false}
-          autoFocus={false}
           helperText={touched[item.key] && errors[item.key]}
           error={Boolean(touched[item.key] && errors[item.key])}
           onChange={(e) => {

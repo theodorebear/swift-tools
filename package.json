@@ -49,6 +49,7 @@
     "@babel/runtime": "^7.17.2",
     "card-validator": "^8.1.1",
     "classnames": "^2.3.1",
+    "cookie": "^0.5.0",
     "formik": "^2.2.9",
     "js-beautify": "^1.14.0",
     "moment": "^2.29.1",

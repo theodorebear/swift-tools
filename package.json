@@ -104,11 +104,11 @@
     "test": "react-scripts test",
     "watch": "watch 'NODE_ENV=production yarn run build' ./src"
   },
-  "version": "0.1.123",
+  "version": "0.1.124",
   "watch": {
     "build": "src/"
   },
   "engines": {
-    "node": "16.18.1"
+    "node": "16.19.0"
   }
 }

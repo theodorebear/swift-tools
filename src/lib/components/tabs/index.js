@@ -97,6 +97,3 @@ export const SwiftTabs = styled.section`
     }
   }
 `
-export const SwiftTabsContent = styled.section`
-  padding: 12px 0;
-`

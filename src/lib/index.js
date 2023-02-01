@@ -4,6 +4,7 @@ import SwiftTitle from "./components/inputs/swift-title"
 import SwiftButton from "./components/buttons/swift-button"
 import SwiftTable from "./components/tables/swift-table"
 import SwiftIcon from "./components/icons/swift-icon"
+import { SwiftTabs, SwiftTabsContent } from "./components/tabs"
 import { SwiftMomentDateFormats } from "./components/time"
 import SwiftProvider, { SwiftTheme } from "./components/providers"
-export { SwiftForm, SwiftTitle, SwiftSubtitle, SwiftButton, SwiftTable, SwiftIcon, SwiftMomentDateFormats, SwiftProvider, SwiftTheme }
+export { SwiftForm, SwiftTitle, SwiftSubtitle, SwiftButton, SwiftTable, SwiftIcon, SwiftMomentDateFormats, SwiftProvider, SwiftTheme, SwiftTabs, SwiftTabsContent }

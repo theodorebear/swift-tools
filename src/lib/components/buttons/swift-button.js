@@ -41,7 +41,7 @@ const SwiftButton = (props) => {
   useEffect(() => {}, [props])
 
   const swiftTheme = useContext(SwiftTheme)
-  console.log("swiftbutton - swiftTheme", swiftTheme)
+  //console.log("swiftbutton - swiftTheme", swiftTheme)
 
   const [modal, setModal] = useState(null)
 

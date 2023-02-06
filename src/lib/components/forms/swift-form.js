@@ -1046,6 +1046,8 @@ const SwiftForm = (props) => {
                 } else if (!/[~`!#$@%^&*+=\-[\]\\';,/{}|\\":<>?]/g.test(values[item.key])) {
                   errors[item.key] = "Password must have a symbol."
                 }
+              } else if (item.validate === "number" && !/^\d+$/.test(values[item.key])) {
+                errors[item.key] = "Must contain only numbers."
               } else if (item.validate === "password_confirm") {
                 fields.forEach(function (i) {
                   if (i.validate === "password" && values[i.key] !== values[item.key]) {

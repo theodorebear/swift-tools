@@ -76,18 +76,22 @@ function App() {
 				/>*/}
 
 				<SwiftForm
-					onSubmit={() => {}}
+					onSubmit={(vals) => console.log(vals)}
+					ß
 					inline={true}
 					resetOnSubmit={false}
 					fields={[
-						{
-							type: "otp",
-							key: "otp",
-							label: "For security, please enter a One-Time Password from your SMS or Authenticator app.",
-							autoFocus: true,
-							validate: true,
-							autoSubmit: true,
-						},
+						// {
+						// 	type: "otp",
+						// 	key: "otp",
+						// 	label: "For security, please enter a One-Time Password from your SMS or Authenticator app.",
+						// 	autoFocus: true,
+						// 	validate: true,
+						// 	autoSubmit: true,
+						// },
+
+						{ type: "text", label: "Max Single Ticket", key: "max_single_ticket", cols: 4, validate: "number" },
+						{ type: "submit", key: "submit", label: "Create" },
 						// {
 						// 	key: "name",
 						// 	type: "text",

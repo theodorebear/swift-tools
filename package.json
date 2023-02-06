@@ -105,7 +105,7 @@
     "test": "react-scripts test",
     "watch": "watch 'NODE_ENV=production yarn run build' ./src"
   },
-  "version": "0.1.131",
+  "version": "0.1.132",
   "watch": {
     "build": "src/"
   },
